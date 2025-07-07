@@ -1,7 +1,8 @@
+import { AntDesign } from "@expo/vector-icons";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { Image } from "expo-image";
+import { Image, ImageBackground } from "expo-image";
 import { useRef, useState } from "react";
-import { Button, Pressable, StyleSheet, Text, View } from "react-native";
+import { Button, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -34,12 +35,16 @@ export default function App() {
   const renderPicture = () => {
     return (
       <View>
-        <Image
+        <ImageBackground
           source={{ uri }}
           contentFit="contain"
-          style={{ width: 300, aspectRatio: 1 }}
-        />
-        <Button onPress={() => setUri(null)} title="Take another picture" />
+          style={{ width: "100%", height: "100%", aspectRatio: 1, flex: 1, justifyContent: "flex-end"}}
+        >
+
+        <View style={{marginBottom: 100}}>
+          <TouchableOpacity onPress={() => setUri(null)}> <AntDesign name="heart" size={20} color="red" /></TouchableOpacity>
+        </View>
+        </ImageBackground>
       </View>
     );
   };
