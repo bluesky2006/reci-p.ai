@@ -2,20 +2,23 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import RecipeList from "./RecipeList";
+import CameraView from "./CameraView"
 
 function HomePage() {
   return (
-    <View style={styles.homePageContainer}>
-      <RecipeList />
-      <TouchableOpacity style={styles.buttonContainer}>
-        <AntDesign
-          name="pluscircle"
-          size={60}
-          color="black"
-          style={styles.button}
-        />
-      </TouchableOpacity>
-    </View>
+    // <View style={styles.homePageContainer}>
+    //   <RecipeList />
+    //   <TouchableOpacity style={styles.buttonContainer}>
+    //     <AntDesign
+    //       name="pluscircle"
+    //       size={60}
+    //       color="black"
+    //       style={styles.button}
+    //     />
+    //   </TouchableOpacity>
+    // </View>
+
+    <CameraView />
   );
 }
 
