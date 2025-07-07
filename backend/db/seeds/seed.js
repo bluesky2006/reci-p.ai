@@ -1,8 +1,6 @@
-import connection from "../connection.js";
 import users from "../data/development-data/users.js";
-const { db, client } = connection;
 
-const seed = async () => {
+const seed = async (db) => {
   try {
     const usersCollection = db.collection("users");
     await usersCollection.deleteMany({});
@@ -10,11 +8,8 @@ const seed = async () => {
     console.log("Seeded successfully");
   } catch (err) {
     console.error("Seeding failed:", err);
-  } finally {
-    await client.close();
+    throw err;
   }
 };
-
-seed();
 
 export default seed;

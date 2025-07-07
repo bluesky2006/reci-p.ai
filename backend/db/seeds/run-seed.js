@@ -4,6 +4,7 @@ const { client, db } = connection;
 
 const runSeed = async () => {
   try {
+    await client.connect();
     await seed(db);
     console.log("Seeded successfully");
   } catch (err) {
