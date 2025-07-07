@@ -6,7 +6,7 @@ function RecipeCard() {
   const [isFavourite, setIsFavourite] = useState(false);
 
   function handleFavourite() {
-    if (isFavourite === false) {
+    if (!isFavourite) {
       setIsFavourite(true);
     } else {
       setIsFavourite(false);
@@ -24,9 +24,9 @@ function RecipeCard() {
         <Text style={styles.bodyText}>Preview recipe text...</Text>
         <TouchableOpacity onPress={handleFavourite}>
           {isFavourite ? (
-            <AntDesign name="heart" size={24} color="black" />
+            <AntDesign name="heart" size={20} color="red" />
           ) : (
-            <AntDesign name="hearto" size={24} color="black" />
+            <AntDesign name="hearto" size={20} color="black" />
           )}
         </TouchableOpacity>
       </View>
