@@ -1,12 +1,12 @@
 import connection from "../connection.js";
-import { userData } from "./path/to/index.js";
+import users from "../data/development-data/users.js";
 const { db, client } = connection;
 
 const seed = async () => {
   try {
     const usersCollection = db.collection("users");
     await usersCollection.deleteMany({});
-    await usersCollection.insertMany(userData);
+    await usersCollection.insertMany(users);
     console.log("Seeded successfully");
   } catch (err) {
     console.error("Seeding failed:", err);
@@ -16,3 +16,5 @@ const seed = async () => {
 };
 
 seed();
+
+export default seed;
