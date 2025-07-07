@@ -2,12 +2,14 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "listen.js",
   "scripts": {
     "setup-dbs": "node ./db/setup-dbs.js",
     "test": "jest",
     "seed-dev": "node ./db/seeds/run-seed.js",
-    "test-seed": "jest seed.test.js"
+    "test-seed": "jest seed.test.js",
+    "test-app": "jest app.test.js",
+    "start": "nodemon listen.js"
   },
   "keywords": [],
   "author": "",
