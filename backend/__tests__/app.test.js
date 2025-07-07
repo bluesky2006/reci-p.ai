@@ -51,3 +51,25 @@ describe("GET /api/users/:username", () => {
       });
   });
 });
+
+describe("GET /api/users/:username", () => {
+  test("200: Responds with a user object from our user collection", () => {
+    return request(app)
+      .get("/api/users/butter_bridge/recipes")
+      .expect(200)
+      .then(({ body }) => {});
+  });
+});
+describe("POST /api/users", () => {
+  test("201: inserts data and responds with the created user if valid request", () => {
+    const data = { username: "validusername", name: "Valid Username" };
+    return request(app)
+      .post("/api/users")
+      .send(data)
+      .expect(201)
+      .then((response) => {
+        const body = JSON.parse(response.text);
+        expect(body.createdUser.length).toBe(24);
+      });
+  });
+});

@@ -4,4 +4,8 @@ const fetchUser = async (db, username) => {
   return user;
 };
 
-module.exports = fetchUser;
+const insertUser = async (db, username, name) => {
+  const newUser = await db.collection("users").insertOne({ username, name });
+  return newUser.insertedId;
+};
+module.exports = { fetchUser, insertUser };

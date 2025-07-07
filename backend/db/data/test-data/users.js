@@ -4,6 +4,13 @@ module.exports = [
     name: "jonny",
     avatar_url:
       "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+    recipes: [
+      {
+        recipeName: "jacket potato",
+        ingredients: ["butter", "beans", "potato"],
+        instructions: ["1.", "2.", "3."],
+      },
+    ],
   },
   {
     username: "icellusedkars",

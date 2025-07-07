@@ -1,5 +1,5 @@
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const { MongoClient } = require("mongodb");
 const path = require("path");
 
 const ENV = process.env.NODE_ENV || "development";
@@ -10,13 +10,19 @@ if (!uri) {
   throw new Error("No MongoDB connection string configured in ATLAS_URI");
 }
 
-const client = new MongoClient(uri);
-
 async function connectToDb() {
-  await client.connect();
-  const db = client.db(process.env.MONGO_DB_NAME || "recipai");
-  console.log(`Connected to database: ${db.databaseName}`);
-  return { client, db };
+  try {
+    await mongoose.connect(uri, {
+      dbName: process.env.MONGO_DB_NAME || "recipai",
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log(`Connected to database: ${mongoose.connection.name}`);
+    return mongoose.connection;
+  } catch (err) {
+    console.error("Failed to connect to MongoDB", err);
+    throw err;
+  }
 }
 
 module.exports = connectToDb;
