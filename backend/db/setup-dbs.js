@@ -17,14 +17,11 @@ async function resetDatabase(dbInstance) {
 
 async function main() {
   try {
-    const dbNames = ["recipai", "recipai_test"];
-
-    for (const name of dbNames) {
-      const database = client.db(name);
-      await resetDatabase(database);
-    }
+    await client.connect();
+    const database = client.db("recipai");
+    await resetDatabase(database);
   } catch (e) {
-    console.error("Error resetting databases", e);
+    console.error("Error resetting database", e);
   } finally {
     await client.close();
   }
