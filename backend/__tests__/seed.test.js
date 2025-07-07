@@ -27,5 +27,6 @@ beforeEach(async () => {
 test("seed inserts users", async () => {
   await seed(db, users);
   const insertedUsers = await db.collection("users").find({}).toArray();
+  console.log(insertedUsers);
   expect(insertedUsers.length).toBeGreaterThan(0);
 });
