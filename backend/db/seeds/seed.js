@@ -1,10 +1,8 @@
-import users from "../data/development-data/users.js";
-
-const seed = async (db) => {
+const seed = async (db, data) => {
   try {
     const usersCollection = db.collection("users");
     await usersCollection.deleteMany({});
-    await usersCollection.insertMany(users);
+    await usersCollection.insertMany(data);
     console.log("Seeded successfully");
   } catch (err) {
     console.error("Seeding failed:", err);
@@ -12,4 +10,4 @@ const seed = async (db) => {
   }
 };
 
-export default seed;
+module.exports = seed;

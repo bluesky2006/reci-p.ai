@@ -1,4 +1,4 @@
-const users = [
+module.exports = [
   {
     username: "tickle122",
     name: "Tom Tickle",
@@ -36,5 +36,3 @@ const users = [
       "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141",
   },
 ];
-
-export default users;
