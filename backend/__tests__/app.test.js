@@ -57,7 +57,6 @@ describe("GET /api/users/:id", () => {
       .get("/api/users/invaliduserid")
       .expect(404)
       .then(({ body }) => {
-        console.log(body);
         expect(body.error).toBe("User not found");
       });
   });
@@ -145,7 +144,6 @@ describe("GET /api/recipes/:id", () => {
     const response = await request(app)
       .get(`/api/recipes/${recipe._id.toString()}`)
       .expect(200);
-    console.log(response.body);
     expect(response.body.title).toBe("Avocado Toast");
     expect(response.body.ingredients).toContain("1 ripe avocado");
   });
