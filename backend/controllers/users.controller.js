@@ -1,9 +1,13 @@
-const { fetchUser, insertUser } = require("../models/users.model");
+const {
+  fetchUser,
+  insertUser,
+  fetchUserRecipes,
+} = require("../models/users.model");
 
 const getUser = (req, res, next) => {
-  const { username } = req.params;
+  const { _id } = req.params;
   const db = req.app.locals.db;
-  return fetchUser(db, username)
+  return fetchUser(db, _id)
     .then((user) => {
       res.status(200).send(user);
     })
@@ -24,4 +28,20 @@ const postUser = (req, res, next) => {
     });
 };
 
-module.exports = { getUser, postUser };
+const getUserRecipes = (req, res, next) => {
+  const { _userId } = req.params;
+  const db = req.app.locals.db;
+  return fetchUserRecipes(db, _userId)
+    .then((recipes) => {
+      const formattedRecipes = recipes.map((recipe) => ({
+        ...recipe,
+        _id: recipe._id.toString(),
+        userId: recipe.userId.toString(),
+      }));
+      res.status(200).send({ recipes: formattedRecipes });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+module.exports = { getUser, postUser, getUserRecipes };

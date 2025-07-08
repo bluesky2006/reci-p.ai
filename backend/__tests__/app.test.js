@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const seed = require("../db/seeds/seed.js");
-const users = require("../db/data/test-data/users.js");
+const testData = require("../db/data/test-data");
 const request = require("supertest");
 const app = require("../app");
 const endpointsJson = require("../db/data/endpoints.json");
@@ -17,17 +17,15 @@ beforeAll(async () => {
   await client.connect();
   db = client.db("testdb");
 });
+
 beforeEach(async () => {
+  await seed(db, testData);
   app.locals.db = db;
 });
+
 afterAll(async () => {
   await client.close();
   await mongoServer.stop();
-});
-
-beforeEach(async () => {
-  await db.collection("users").deleteMany({});
-  await db.collection("users").insertMany(users);
 });
 
 describe("GET /api/json", () => {
@@ -41,10 +39,14 @@ describe("GET /api/json", () => {
   });
 });
 
-describe("GET /api/users/:username", () => {
-  test("200: Responds with a user object from our user collection", () => {
+describe("GET /api/users/:id", () => {
+  test("200: Responds with a user object from our user collection", async () => {
+    const user = await db
+      .collection("users")
+      .findOne({ username: "butter_bridge" });
+
     return request(app)
-      .get("/api/users/butter_bridge")
+      .get(`/api/users/${user._id.toString()}`)
       .expect(200)
       .then(({ body }) => {
         expect(body.username).toBe("butter_bridge");
@@ -52,14 +54,6 @@ describe("GET /api/users/:username", () => {
   });
 });
 
-describe("GET /api/users/:username", () => {
-  test("200: Responds with a user object from our user collection", () => {
-    return request(app)
-      .get("/api/users/butter_bridge/recipes")
-      .expect(200)
-      .then(({ body }) => {});
-  });
-});
 describe("POST /api/users", () => {
   test("201: inserts data and responds with the created user if valid request", () => {
     const data = { username: "validusername", name: "Valid Username" };
@@ -70,6 +64,37 @@ describe("POST /api/users", () => {
       .then((response) => {
         const body = JSON.parse(response.text);
         expect(body.createdUser.length).toBe(24);
+      });
+  });
+});
+
+describe("GET /api/users/:id/recipes", () => {
+  test("200: returns recipes associated to a user", async () => {
+    const user = await db
+      .collection("users")
+      .findOne({ username: "butter_bridge" });
+
+    const response = await request(app)
+      .get(`/api/users/${user._id}/recipes`)
+      .expect(200);
+    expect(Array.isArray(response.body.recipes)).toBe(true);
+    response.body.recipes.forEach((recipe) => {
+      expect(recipe.userId).toEqual(user._id.toString());
+    });
+  });
+});
+
+describe("GET /api/users/:id", () => {
+  test("200: Responds with a recipe object from our recipe collection", async () => {
+    const recipe = await db
+      .collection("recipes")
+      .findOne({ title: "Avocado Toast" });
+
+    return request(app)
+      .get(`/api/recipes/${recipe._id.toString()}`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.title).toBe("Avocado Toast");
       });
   });
 });
