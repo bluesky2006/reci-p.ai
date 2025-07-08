@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import imageProcessing from "../utils/imageProcessing";
 
 export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -61,7 +62,8 @@ export default function Camera() {
             <TouchableOpacity onPress={() => setUri(null)}>
               <FontAwesome name="refresh" size={30} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setUri(null)}>
+            <TouchableOpacity onPress={() => {
+              imageProcessing(uri)}}>
               <FontAwesome name="check" size={30} color="black" />
             </TouchableOpacity>
           </View>
