@@ -1,6 +1,7 @@
-import { AntDesign } from "@expo/vector-icons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { Image, ImageBackground } from "expo-image";
+import { ImageBackground } from "expo-image";
+import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
   Button,
@@ -10,12 +11,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Redo from '../assets/icons/redo.svg'
 
 export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef(null);
   const [uri, setUri] = useState(null);
+  const router = useRouter();
 
   if (!permission) {
     return null;
@@ -42,19 +43,30 @@ export default function Camera() {
 
   const renderPicture = () => {
     return (
-      // <View>
-      //   <ImageBackground
-      //     source={{ uri }}
-      //     contentFit="contain"
-      //     style={{ width: "100%", height: "100%", aspectRatio: 1, justifyContent: "flex-end"}}
-      //   >
-      //   <View style={{marginBottom: 100, alignItems:"center"}}>
-      <TouchableOpacity onPress={() => setUri(null)}>
-          <Redo width={200} height={200}/>
-      </TouchableOpacity>
-      //   </View>
-      //   </ImageBackground>
-      // </View>
+      <View>
+        <ImageBackground
+          source={{ uri }}
+          contentFit="contain"
+          style={{
+            width: "100%",
+            height: "100%",
+            aspectRatio: 1,
+            flex: 1,
+          }}
+        >
+          <View style={styles.previewButtonContainer}>
+            <TouchableOpacity onPress={() => router.back()}>
+              <FontAwesome name="close" size={30} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setUri(null)}>
+              <FontAwesome name="refresh" size={30} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setUri(null)}>
+              <FontAwesome name="check" size={30} color="black" />
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+      </View>
     );
   };
 
@@ -114,13 +126,22 @@ const styles = StyleSheet.create({
   },
   shutterContainer: {
     position: "absolute",
-    bottom: 44,
-    left: 0,
+    bottom: 60,
     width: "100%",
     alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
     paddingHorizontal: 30,
+  },
+  previewButtonContainer: {
+    position: "absolute",
+    bottom: 60,
+    left: "30%",
+    width: "40%",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 75,
+    backgroundColor: "white",
+    padding: 30,
+    borderRadius: 20,
   },
   shutterBtn: {
     backgroundColor: "transparent",
