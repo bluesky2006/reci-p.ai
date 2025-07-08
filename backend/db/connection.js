@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
 const path = require("path");
 
@@ -11,18 +11,11 @@ if (!uri) {
 }
 
 async function connectToDb() {
-  try {
-    await mongoose.connect(uri, {
-      dbName: process.env.MONGO_DB_NAME || "recipai",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log(`Connected to database: ${mongoose.connection.name}`);
-    return mongoose.connection;
-  } catch (err) {
-    console.error("Failed to connect to MongoDB", err);
-    throw err;
-  }
+  const client = new MongoClient(uri);
+  await client.connect();
+  const db = client.db(process.env.MONGO_DB_NAME || "recipai");
+  console.log(`Connected to database: ${db.databaseName}`);
+  return { client, db };
 }
 
 module.exports = connectToDb;

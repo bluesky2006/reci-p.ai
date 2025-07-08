@@ -391,7 +391,7 @@ describe("PATCH /api/users/:userId/recipes/order", () => {
     await request(app)
       .patch(`/api/users/${user._id}/recipes/order`)
       .send({ orderedRecipeIds: newOrder })
-      .expect(204);
+      .expect(200);
 
     const reordered = await db
       .collection("recipes")

@@ -9,7 +9,8 @@
     "seed-dev": "node ./db/seeds/run-seed.js",
     "test-seed": "jest seed.test.js",
     "test-app": "jest app.test.js",
-    "start": "nodemon listen.js"
+    "start": "nodemon listen.js",
+    "seed-prod": "NODE_ENV=production node ./db/seeds/run-seed.js"
   },
   "keywords": [],
   "author": "",

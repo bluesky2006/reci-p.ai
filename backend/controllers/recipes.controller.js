@@ -62,7 +62,7 @@ const patchRecipeOrder = (req, res, next) => {
   const db = req.app.locals.db;
 
   return updateRecipeOrder(db, _userId, orderedRecipeIds)
-    .then(() => res.status(204).send())
+    .then((response) => res.status(200).send(response))
     .catch(next);
 };
 

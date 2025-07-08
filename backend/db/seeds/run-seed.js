@@ -1,11 +1,13 @@
 const connectToDb = require("../connection.js");
 const seed = require("./seed.js");
-const users = require("../data/development-data/users.js");
+const developmentData = require("../data/development-data");
 
 const runSeed = async () => {
   try {
     const { client, db } = await connectToDb();
-    await seed(db, users);
+
+    await seed(db, developmentData);
+
     console.log("Seeded successfully");
     await client.close();
   } catch (err) {

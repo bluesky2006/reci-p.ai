@@ -1,5 +1,119 @@
 {
-  "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+  "GET /recipes/:_id": {
+    "description": "Get a recipe by ID",
+    "exampleResponse": {
+      "_id": "686cedd6237d6f414d7d1c16",
+      "title": "Avocado Toast",
+      "ingredients": [
+        "1 ripe avocado",
+        "2 slices of wholegrain bread",
+        "A pinch of sea salt"
+      ],
+      "steps": [
+        "Toast the bread slices to your preferred crispness.",
+        "Cut and mash the avocado.",
+        "Spread the avocado on the toast.",
+        "Sprinkle sea salt on top."
+      ],
+      "username": "butter_bridge",
+      "userId": "686cedd6237d6f414d7d1c09"
+    }
+  },
+  "DELETE /recipes/:_id": {
+    "description": "Delete a recipe by ID",
+    "exampleResponse": {}
+  },
+  "PATCH /recipes/:_id": {
+    "description": "Update a recipe's favourite status",
+    "exampleRequest": {
+      "favourite": true
+    },
+    "exampleResponse": {
+      "updatedRecipe": {
+        "matchedCount": 1,
+        "modifiedCount": 1,
+        "acknowledged": true
+      }
+    }
+  },
+  "POST /recipes": {
+    "description": "Create a new recipe",
+    "exampleRequest": {
+      "title": "Avocado Toast",
+      "ingredients": [
+        "1 ripe avocado",
+        "2 slices of wholegrain bread",
+        "A pinch of sea salt"
+      ],
+      "steps": [
+        "Toast the bread slices.",
+        "Mash the avocado.",
+        "Spread avocado on bread.",
+        "Sprinkle sea salt."
+      ],
+      "userId": "686cedd6237d6f414d7d1c09"
+    },
+    "exampleResponse": {
+      "createdRecipe": "686cedd6237d6f414d7d1c16"
+    }
+  },
+  "GET /users/:_id": {
+    "description": "Get a user by ID",
+    "exampleResponse": {
+      "_id": "686cedd6237d6f414d7d1c09",
+      "username": "butter_bridge",
+      "name": "Butter Bridge"
+    }
+  },
+  "POST /users": {
+    "description": "Create a new user",
+    "exampleRequest": {
+      "username": "butter_bridge",
+      "name": "Butter Bridge"
+    },
+    "exampleResponse": {
+      "createdUser": "686cedd6237d6f414d7d1c09"
+    }
+  },
+  "GET /users/:_userId/recipes": {
+    "description": "Get all recipes for a user",
+    "exampleResponse": {
+      "recipes": [
+        {
+          "_id": "686cedd6237d6f414d7d1c16",
+          "title": "Avocado Toast",
+          "ingredients": [
+            "1 ripe avocado",
+            "2 slices of wholegrain bread",
+            "A pinch of sea salt"
+          ],
+          "steps": [
+            "Toast the bread slices.",
+            "Mash the avocado.",
+            "Spread avocado on bread.",
+            "Sprinkle sea salt."
+          ],
+          "userId": "686cedd6237d6f414d7d1c09"
+        }
+      ]
+    }
+  },
+  "PATCH /api/users/:_userId/recipes/order": {
+    "description": "Updates the order of recipes for a user and returns the bulk write result",
+    "exampleRequest": {
+      "orderedRecipeIds": [
+        "686cedd6237d6f414d7d1c16",
+        "686cedd6237d6f414d7d1c17",
+        "686cedd6237d6f414d7d1c18"
+      ]
+    },
+    "exampleResponse": {
+      "acknowledged": true,
+      "matchedCount": 3,
+      "modifiedCount": 3,
+      "upsertedCount": 0,
+      "upsertedIds": {},
+      "deletedCount": 0
+    }
   }
 }
