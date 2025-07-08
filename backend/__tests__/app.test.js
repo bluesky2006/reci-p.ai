@@ -52,6 +52,15 @@ describe("GET /api/users/:id", () => {
         expect(body.username).toBe("butter_bridge");
       });
   });
+  test.only("404: Responds with an error if given a userid that isn't present in our user collection", () => {
+    return request(app)
+      .get("/api/users/test")
+      .expect(404)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body.error).toBe("not found");
+      });
+  });
 });
 
 describe("POST /api/users", () => {
@@ -73,7 +82,6 @@ describe("GET /api/users/:id/recipes", () => {
     const user = await db
       .collection("users")
       .findOne({ username: "butter_bridge" });
-
     const response = await request(app)
       .get(`/api/users/${user._id}/recipes`)
       .expect(200);
@@ -84,17 +92,95 @@ describe("GET /api/users/:id/recipes", () => {
   });
 });
 
-describe("GET /api/users/:id", () => {
-  test("200: Responds with a recipe object from our recipe collection", async () => {
+describe("GET /api/recipes/:id", () => {
+  test("200: Responds with a recipe object from the recipe collection", async () => {
+    const recipe = await db
+      .collection("recipes")
+      .findOne({ title: "Avocado Toast" });
+
+    const response = await request(app)
+      .get(`/api/recipes/${recipe._id.toString()}`)
+      .expect(200);
+    console.log(response.body);
+    expect(response.body.title).toBe("Avocado Toast");
+    expect(response.body.ingredients).toContain("1 ripe avocado");
+  });
+});
+
+describe("POST /api/recipes", () => {
+  test("201: Inserts data to recipes collection with the correct userid", async () => {
+    const data = {
+      title: "test recipe",
+      ingredients: ["ingredient one", "ingredient two"],
+      steps: ["step 1:", "step 2:"],
+    };
+
+    return request(app)
+      .post("/api/recipes")
+      .send(data)
+      .expect(201)
+      .then((response) => {
+        const body = JSON.parse(response.text);
+        expect(body.createdRecipe.length).toBe(24);
+      });
+  });
+});
+
+describe("DELETE /api/recipes/:id", () => {
+  test("204: Deletes recipe that corresponds to _id and returns no data", async () => {
     const recipe = await db
       .collection("recipes")
       .findOne({ title: "Avocado Toast" });
 
     return request(app)
-      .get(`/api/recipes/${recipe._id.toString()}`)
+      .delete(`/api/recipes/${recipe._id.toString()}`)
+      .expect(204);
+  });
+});
+
+describe("PATCH /api/recipes/:id", () => {
+  test("200: updates object with favourite property and returns updated object", async () => {
+    const recipe = await db
+      .collection("recipes")
+      .findOne({ title: "Avocado Toast" });
+
+    const data = { favourite: true };
+
+    return request(app)
+      .patch(`/api/recipes/${recipe._id.toString()}`)
+      .send(data)
       .expect(200)
       .then(({ body }) => {
-        expect(body.title).toBe("Avocado Toast");
+        expect(body.updatedRecipe.modifiedCount).toBe(1);
       });
+  });
+});
+
+describe("PATCH /api/users/:userId/recipes/order", () => {
+  test("204: Reorders recipes for a user", async () => {
+    const user = await db
+      .collection("users")
+      .findOne({ username: "butter_bridge" });
+    const recipes = await db
+      .collection("recipes")
+      .find({ userId: user._id })
+      .sort({ order: 1 })
+      .toArray();
+
+    const newOrder = recipes.map((recipe) => recipe._id.toString()).reverse();
+
+    await request(app)
+      .patch(`/api/users/${user._id}/recipes/order`)
+      .send({ orderedRecipeIds: newOrder })
+      .expect(204);
+
+    const reordered = await db
+      .collection("recipes")
+      .find({ userId: user._id })
+      .sort({ order: 1 })
+      .toArray();
+
+    const reorderedIds = reordered.map((recipe) => recipe._id.toString());
+    expect(reorderedIds).toEqual(newOrder);
   });
 });
