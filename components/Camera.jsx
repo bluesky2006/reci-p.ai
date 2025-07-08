@@ -67,7 +67,7 @@ export default function Camera() {
                 const aiResult = await imageProcessing(uri);
                 router.navigate({
                   pathname: "/response_preview",
-                  params: { result: aiResult },
+                  params: { result: aiResult, photo: uri },
                 });
               }}
             >
