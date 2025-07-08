@@ -17,6 +17,9 @@ const getUser = (req, res, next) => {
 };
 
 const postUser = (req, res, next) => {
+  if (!req.body) {
+    return res.status(400).json({ error: "bad request" });
+  }
   const { username, name } = req.body;
   const db = req.app.locals.db;
   return insertUser(db, username, name)

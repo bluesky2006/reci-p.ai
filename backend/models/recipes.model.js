@@ -1,6 +1,10 @@
 const { ObjectId } = require("mongodb");
+const { validateUserIdExists } = require("../utils/validation");
 
 const fetchRecipe = async (db, recipeIdString) => {
+  if (!ObjectId.isValid(recipeIdString)) {
+    throw { status: 404, message: "Recipe not found" };
+  }
   const recipeObjectId = new ObjectId(recipeIdString);
   const recipe = await db
     .collection("recipes")
@@ -8,27 +12,74 @@ const fetchRecipe = async (db, recipeIdString) => {
   if (!recipe) throw { status: 404, message: "User not found" };
   return recipe;
 };
-
 const insertRecipe = async (db, title, ingredients, steps, userId) => {
-  const newRecipe = await db
-    .collection("recipes")
-    .insertOne({ title, ingredients, steps, userId });
+  if (
+    typeof title !== "string" ||
+    title.trim() === "" ||
+    !Array.isArray(ingredients) ||
+    ingredients.length === 0 ||
+    !Array.isArray(steps) ||
+    steps.length === 0 ||
+    !userId ||
+    !ObjectId.isValid(userId)
+  ) {
+    throw { status: 400, message: "Bad Request" };
+  }
+  let validIngredients = true;
+  ingredients.forEach((ing) => {
+    if (typeof ing !== "string" || ing.trim() === "") {
+      validIngredients = false;
+    }
+  });
+
+  let validSteps = true;
+  steps.forEach((step) => {
+    if (typeof step !== "string" || step.trim() === "") {
+      validSteps = false;
+    }
+  });
+
+  if (!validIngredients || !validSteps) {
+    throw { status: 400, message: "Bad Request" };
+  }
+
+  await validateUserIdExists(db, userId);
+
+  const userObjectId = new ObjectId(userId);
+
+  const newRecipe = await db.collection("recipes").insertOne({
+    title: title.trim(),
+    ingredients,
+    steps,
+    userId: userObjectId,
+  });
+
   return newRecipe.insertedId;
 };
 
 const removeRecipe = async (db, recipeIdString) => {
+  if (!ObjectId.isValid(recipeIdString)) {
+    throw { status: 404, message: "Recipe not found" };
+  }
   const recipeObjectId = new ObjectId(recipeIdString);
   const result = await db
     .collection("recipes")
     .deleteOne({ _id: recipeObjectId });
   if (result.deletedCount === 0) {
-    throw { status: 404, message: "recipe not found" };
+    throw { status: 404, message: "Recipe not found" };
   }
 
   return;
 };
 
 const adjustRecipe = async (db, recipeIdString, favourite) => {
+  if (!ObjectId.isValid(recipeIdString)) {
+    throw { status: 404, message: "Recipe not found" };
+  }
+  if (typeof favourite !== "boolean") {
+    throw { status: 400, message: "Bad Request" };
+  }
+
   const recipeObjectId = new ObjectId(recipeIdString);
 
   const result = await db
