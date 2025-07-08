@@ -2,9 +2,17 @@ import { AntDesign } from "@expo/vector-icons";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { Image, ImageBackground } from "expo-image";
 import { useRef, useState } from "react";
-import { Button, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Redo from '../assets/icons/redo.svg'
 
-export default function App() {
+export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef(null);
   const [uri, setUri] = useState(null);
@@ -34,29 +42,31 @@ export default function App() {
 
   const renderPicture = () => {
     return (
-      <View>
-        <ImageBackground
-          source={{ uri }}
-          contentFit="contain"
-          style={{ width: "100%", height: "100%", aspectRatio: 1, flex: 1, justifyContent: "flex-end"}}
-        >
-
-        <View style={{marginBottom: 100}}>
-          <TouchableOpacity onPress={() => setUri(null)}> <AntDesign name="heart" size={20} color="red" /></TouchableOpacity>
-        </View>
-        </ImageBackground>
-      </View>
+      // <View>
+      //   <ImageBackground
+      //     source={{ uri }}
+      //     contentFit="contain"
+      //     style={{ width: "100%", height: "100%", aspectRatio: 1, justifyContent: "flex-end"}}
+      //   >
+      //   <View style={{marginBottom: 100, alignItems:"center"}}>
+      <TouchableOpacity onPress={() => setUri(null)}>
+          <Redo width={200} height={200}/>
+      </TouchableOpacity>
+      //   </View>
+      //   </ImageBackground>
+      // </View>
     );
   };
 
   const renderCamera = () => {
     return (
-      <CameraView
-        style={styles.camera}
-        ref={ref}
-        mute={false}
-        responsiveOrientationWhenOrientationLocked
-      >
+      <>
+        <CameraView
+          style={styles.camera}
+          ref={ref}
+          mute={false}
+          responsiveOrientationWhenOrientationLocked
+        />
         <View style={styles.shutterContainer}>
           <Pressable onPress={takePicture}>
             {({ pressed }) => (
@@ -80,7 +90,7 @@ export default function App() {
             )}
           </Pressable>
         </View>
-      </CameraView>
+      </>
     );
   };
 
