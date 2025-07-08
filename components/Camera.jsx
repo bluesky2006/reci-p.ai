@@ -62,8 +62,15 @@ export default function Camera() {
             <TouchableOpacity onPress={() => setUri(null)}>
               <FontAwesome name="refresh" size={30} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-              imageProcessing(uri)}}>
+            <TouchableOpacity
+              onPress={async () => {
+                const aiResult = await imageProcessing(uri);
+                router.navigate({
+                  pathname: "/response_preview",
+                  params: { result: aiResult },
+                });
+              }}
+            >
               <FontAwesome name="check" size={30} color="black" />
             </TouchableOpacity>
           </View>
