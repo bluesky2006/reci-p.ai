@@ -1,16 +1,18 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
-import React from "react";
+import { useRouter } from "expo-router";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import RecipeList from "../components/RecipeList";
-import { useRouter } from "expo-router";
 // import CameraView from "./CameraView"
 
 function HomePage() {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <View style={styles.homePageContainer}>
       <RecipeList />
-      <TouchableOpacity style={styles.buttonContainer} onPress={() => router.navigate('/camera')}>
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={() => router.navigate("/camera_screen")}
+      >
         <AntDesign
           name="pluscircle"
           size={60}
@@ -19,7 +21,6 @@ function HomePage() {
         />
       </TouchableOpacity>
     </View>
-
   );
 }
 
