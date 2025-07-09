@@ -1,25 +1,31 @@
-import { StyleSheet, View } from "react-native";
-import RecipeCard from "./RecipeCard";
 import { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { fetchRecipes } from "../api/api";
+import RecipeCard from "./RecipeCard";
 
 function RecipeList() {
-  const [recipes, setRecipes] = useState([])
+  const [recipes, setRecipes] = useState([]);
 
-  useEffect(()=>{
-    fetchRecipes("686d32e3cc16d4d33d6d0e62").then((result)=> {
-      setRecipes(result.recipes)
-    }).catch((err)=>{
-      console.log(err)
-    })
-  }, [])
+  useEffect(() => {
+    fetchRecipes("686d32e3cc16d4d33d6d0e62")
+      .then((result) => {
+        setRecipes(result.recipes);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <View style={[styles.recipeListContainer, styles.shadowProp]}>
-      {recipes.map((recipe)=>
-          <RecipeCard key={recipe._id} title={recipe.title} favourite={recipe.favourite} _id={recipe._id}/>
-        )}
-      {/* <RecipeCard /> */}
+      {recipes.map((recipe) => (
+        <RecipeCard
+          key={recipe._id}
+          title={recipe.title}
+          favourite={recipe.favourite}
+          _id={recipe._id}
+        />
+      ))}
     </View>
   );
 }
