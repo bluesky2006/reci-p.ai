@@ -19,7 +19,7 @@ function ResponsePreview() {
         />
       </View>
       <View>
-        <Text>{title}</Text>
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>{title}</Text>
         <Text>{ingredients}</Text>
         <Text>{steps}</Text>
       </View>
@@ -28,7 +28,7 @@ function ResponsePreview() {
 }
 
 const styles = StyleSheet.create({
-  imageContainer: { height: 100, width: 100 },
+  imageContainer: { height: 300, width: 300 },
 });
 
 export default ResponsePreview;
