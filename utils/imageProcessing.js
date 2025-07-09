@@ -47,6 +47,6 @@ async function geminiCall(ocrText) {
     },
   });
   console.log(JSON.parse(response.candidates[0].content.parts[0].text));
-  return JSON.parse(response.candidates[0].content.parts[0].text);
+  return response.candidates[0].content.parts[0].text;
 }
 export default imageProcessing;
