@@ -1,4 +1,4 @@
-export const baseUrl = `https://reci-p-ai.onrender.com/api/`;
+export const baseUrl = `https://reci-p-ai.onrender.com/api`;
 
 export function fetchUser(userId) {
   return fetch(`${baseUrl}/users/${userId}`).then((res) => {
