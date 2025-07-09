@@ -110,6 +110,27 @@ export default function Camera() {
               </View>
             )}
           </Pressable>
+          <Pressable onPress={() => router.navigate("/image_picker")}>
+            {({ pressed }) => (
+              <View
+                style={[
+                  styles.shutterBtn,
+                  {
+                    opacity: pressed ? 0.5 : 1,
+                  },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.shutterBtnInner,
+                    {
+                      backgroundColor: "white",
+                    },
+                  ]}
+                />
+              </View>
+            )}
+          </Pressable>
         </View>
       </>
     );
