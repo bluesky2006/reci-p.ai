@@ -1,3 +1,13 @@
+const fs = require("fs");
+const ticklePancakes = fs.readFileSync(
+  __dirname + "/../images/ticklepancakes.png"
+);
+const coffee = fs.readFileSync(__dirname + "/../images/coffee.jpeg");
+const greekSalad = fs.readFileSync(__dirname + "/../images/greeksalad.jpeg");
+const jam = fs.readFileSync(__dirname + "/../images/jam.jpeg");
+const muffins = fs.readFileSync(__dirname + "/../images/muffins.jpeg");
+const nachos = fs.readFileSync(__dirname + "/../images/nachos.jpeg");
+
 module.exports = [
   {
     title: "Tickle Pancakes",
@@ -11,6 +21,7 @@ module.exports = [
     username: "tickle122",
     order: 0,
     favourite: false,
+    image: ticklePancakes,
   },
   {
     title: "Grumpy's Black Coffee",
@@ -23,6 +34,7 @@ module.exports = [
     username: "grumpy19",
     order: 0,
     favourite: false,
+    image: coffee,
   },
   {
     title: "Happy Sunshine Salad",
@@ -35,6 +47,7 @@ module.exports = [
     username: "happyamy2016",
     order: 0,
     favourite: false,
+    image: greekSalad,
   },
   {
     title: "Messy Nachos",
@@ -47,6 +60,7 @@ module.exports = [
     username: "cooljmessy",
     order: 0,
     favourite: false,
+    image: nachos,
   },
   {
     title: "Bump's Blueberry Muffins",
@@ -59,6 +73,7 @@ module.exports = [
     username: "weegembump",
     order: 0,
     favourite: false,
+    image: muffins,
   },
   {
     title: "Jelly's Strawberry Jam",
@@ -71,5 +86,6 @@ module.exports = [
     username: "jessjelly",
     order: 0,
     favourite: false,
+    image: jam,
   },
 ];
