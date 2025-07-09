@@ -6,6 +6,7 @@ const ai = new GoogleGenAI({ apiKey: `${process.env.EXPO_PUBLIC_GEMINI}` });
 const imageProcessing = async (uri) => {
   try {
     const result = await TextRecognition.recognize(uri);
+    console.log(result);
     const aiResponse = await geminiCall(result[0]);
     return aiResponse;
   } catch (error) {
@@ -16,7 +17,7 @@ const imageProcessing = async (uri) => {
 async function geminiCall(ocrText) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: `Tell me what day of the week this is: ${ocrText}`,
+    contents: `Tell me what you see: ${ocrText}`,
     config: {
       responseMimeType: "application/json",
       responseSchema: {
