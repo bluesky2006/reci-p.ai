@@ -10,7 +10,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image,
 } from "react-native";
 import imageProcessing from "../utils/imageProcessing";
 import * as ImagePicker from "expo-image-picker";

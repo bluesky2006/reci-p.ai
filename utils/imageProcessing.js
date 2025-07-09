@@ -17,7 +17,7 @@ const imageProcessing = async (uri) => {
 async function geminiCall(ocrText) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: `Tell me what you see: ${ocrText}`,
+    contents: `Take this OCR output: ${ocrText}. Return a detailed recipe with a title, a list of ingredients, and a numbered list of steps`,
     config: {
       responseMimeType: "application/json",
       responseSchema: {
@@ -25,11 +25,23 @@ async function geminiCall(ocrText) {
         items: {
           type: Type.OBJECT,
           properties: {
-            response: {
+            title: {
               type: Type.STRING,
             },
+            ingredients : {
+              type: Type.ARRAY,
+              items: {
+                type: Type.STRING,
+              },
+            },
+            steps : {
+              type: Type.ARRAY,
+              items: {
+                type: Type.STRING
+              }
+            }
           },
-          propertyOrdering: ["response"],
+          propertyOrdering: ["title", "ingredients", "steps"],
         },
       },
     },
@@ -37,5 +49,4 @@ async function geminiCall(ocrText) {
 
   return response.text;
 }
-
 export default imageProcessing;
