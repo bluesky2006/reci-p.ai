@@ -1,0 +1,62 @@
+module.exports = [
+  {
+    title: "Avocado Toast",
+    ingredients: [
+      "1 ripe avocado",
+      "2 slices of wholegrain bread",
+      "A pinch of sea salt",
+    ],
+    steps: [
+      "Toast the bread slices to your preferred crispness.",
+      "Cut the avocado in half, remove the pit, and scoop the flesh into a bowl.",
+      "Mash the avocado with a fork until smooth but slightly chunky.",
+      "Spread the mashed avocado evenly over the toasted bread.",
+      "Sprinkle a pinch of sea salt on top before serving.",
+    ],
+    username: "butter_bridge",
+    order: 0,
+    favourite: false,
+  },
+  {
+    title: "Banana Smoothie",
+    ingredients: [
+      "1 large banana",
+      "250ml of milk (dairy or plant-based)",
+      "1 tablespoon of honey",
+    ],
+    steps: [
+      "Peel the banana and slice it into smaller chunks.",
+      "Add the banana slices into a blender.",
+      "Pour in the milk and add the honey.",
+      "Blend on high speed for 30–60 seconds, until smooth and creamy.",
+      "Serve chilled, optionally over ice or with a sprinkle of cinnamon.",
+    ],
+    username: "icellusedkars",
+    order: 0,
+    favourite: false,
+  },
+  {
+    title: "Tomato Basil Pasta",
+    ingredients: [
+      "200g spaghetti",
+      "2 large ripe tomatoes",
+      "2 cloves garlic",
+      "Handful of fresh basil leaves",
+      "2 tablespoons olive oil",
+      "Salt and pepper to taste",
+      "Parmesan cheese for garnish",
+    ],
+    steps: [
+      "Cook the spaghetti in salted boiling water according to package instructions until al dente.",
+      "Meanwhile, chop the tomatoes and mince the garlic.",
+      "Heat olive oil in a pan over medium heat, sauté garlic until fragrant (about 1 minute).",
+      "Add chopped tomatoes, cook until they soften and form a sauce (about 5–7 minutes).",
+      "Stir in fresh basil leaves, salt, and pepper.",
+      "Drain pasta and toss it into the sauce until evenly coated.",
+      "Serve topped with grated Parmesan cheese.",
+    ],
+    username: "butter_bridge",
+    order: 1,
+    favourite: false,
+  },
+];
