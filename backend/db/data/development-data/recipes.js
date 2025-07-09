@@ -22,6 +22,7 @@ module.exports = [
     order: 0,
     favourite: false,
     image: ticklePancakes,
+    summary: "it's tickle pancakes!",
   },
   {
     title: "Grumpy's Black Coffee",
@@ -35,6 +36,7 @@ module.exports = [
     order: 0,
     favourite: false,
     image: coffee,
+    summary: "It's grumpy's black coffee!",
   },
   {
     title: "Happy Sunshine Salad",
@@ -48,6 +50,7 @@ module.exports = [
     order: 0,
     favourite: false,
     image: greekSalad,
+    summary: "greek salad",
   },
   {
     title: "Messy Nachos",
@@ -61,6 +64,7 @@ module.exports = [
     order: 0,
     favourite: false,
     image: nachos,
+    summary: "nachos!",
   },
   {
     title: "Bump's Blueberry Muffins",
@@ -74,6 +78,7 @@ module.exports = [
     order: 0,
     favourite: false,
     image: muffins,
+    summary: "muffins!",
   },
   {
     title: "Jelly's Strawberry Jam",
@@ -87,5 +92,6 @@ module.exports = [
     order: 0,
     favourite: false,
     image: jam,
+    summary: "Jammm!",
   },
 ];
