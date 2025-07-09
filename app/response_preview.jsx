@@ -3,8 +3,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 
 function ResponsePreview() {
   const { result, photo } = useLocalSearchParams();
-  const parsedResponse = JSON.parse(result);
-  console.log(photo);
+  console.log(result);
 
   return (
     <View>
@@ -15,7 +14,7 @@ function ResponsePreview() {
         />
       </View>
       <View>
-        <Text>{parsedResponse[0].response}</Text>
+        <Text>{result}</Text>
       </View>
     </View>
   );
