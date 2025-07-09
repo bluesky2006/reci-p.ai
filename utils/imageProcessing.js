@@ -28,25 +28,25 @@ async function geminiCall(ocrText) {
             title: {
               type: Type.STRING,
             },
-            ingredients : {
+            ingredients: {
               type: Type.ARRAY,
               items: {
                 type: Type.STRING,
               },
             },
-            steps : {
+            steps: {
               type: Type.ARRAY,
               items: {
-                type: Type.STRING
-              }
-            }
+                type: Type.STRING,
+              },
+            },
           },
           propertyOrdering: ["title", "ingredients", "steps"],
         },
       },
     },
   });
-
-  return response.text;
+  console.log(JSON.parse(response.candidates[0].content.parts[0].text));
+  return JSON.parse(response.candidates[0].content.parts[0].text);
 }
 export default imageProcessing;
