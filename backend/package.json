@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "listen.js",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "setup-dbs": "node ./db/setup-dbs.js",
     "test": "jest",
