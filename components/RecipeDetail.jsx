@@ -1,20 +1,27 @@
 import { AntDesign } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { favouriteRecipe, fetchRecipe } from "../api/api";
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { deleteRecipe, favouriteRecipe, fetchRecipe } from "../api/api";
 
 const RecipeDetail = () => {
   const { recipeId } = useLocalSearchParams();
   const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFavourite, setIsFavourite] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     setIsLoading(true);
     fetchRecipe(recipeId)
       .then((result) => {
-        console.log("test");
         setRecipe(result);
         setIsFavourite(result.favourite);
       })
@@ -34,6 +41,17 @@ const RecipeDetail = () => {
       setIsFavourite(false);
       favouriteRecipe(recipeId, false);
     }
+  }
+
+  function handleDelete() {
+    deleteRecipe(recipeId)
+      .then(() => {
+        router.back();
+      })
+      .catch((err) => {
+        console.log(err);
+        return <Text>Failed to delete</Text>;
+      });
   }
 
   if (isLoading) {
@@ -70,6 +88,8 @@ const RecipeDetail = () => {
           </Text>
         );
       })}
+      <Button onPress={handleDelete} title="Delete recipe" />
+      <Button title="Home" />
     </View>
   );
 };
