@@ -89,7 +89,7 @@ const RecipeDetail = () => {
         );
       })}
       <Button onPress={handleDelete} title="Delete recipe" />
-      <Button title="Home" />
+      <Button onPress={() => router.back()} title="Home" />
     </View>
   );
 };
