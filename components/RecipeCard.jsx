@@ -1,23 +1,22 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { favouriteRecipe } from "../api/api";
-import { router } from "expo-router";
 
-function RecipeCard({_id, title, favourite, image, summary}) {
+function RecipeCard({ _id, title, favourite, image, summary }) {
   const [isFavourite, setIsFavourite] = useState(false);
 
-  useEffect(()=>{
-    setIsFavourite(favourite)
-  }, [])
-  
+  useEffect(() => {
+    setIsFavourite(favourite);
+  }, [favourite]);
+
   function handleFavourite() {
     if (!isFavourite) {
       setIsFavourite(true);
-      favouriteRecipe(_id, true)
+      favouriteRecipe(_id, true);
     } else {
       setIsFavourite(false);
-      favouriteRecipe(_id, false)
+      favouriteRecipe(_id, false);
     }
   }
 
@@ -25,7 +24,7 @@ function RecipeCard({_id, title, favourite, image, summary}) {
     <View style={[styles.recipeCardContainer, styles.shadowProp]}>
       <Image
         style={styles.recipeThumbnail}
-        source={{uri: `data:image/jpeg;base64,${image}`}}
+        source={{ uri: `data:image/jpeg;base64,${image}` }}
       />
       <View>
         <Text style={styles.recipeTitle}>{title}</Text>
