@@ -7,7 +7,7 @@ const imageProcessing = async (uri) => {
   try {
     const result = await TextRecognition.recognize(uri);
     console.log(result);
-    const aiResponse = await geminiCall(result[0]);
+    const aiResponse = await geminiCall(result);
     return aiResponse;
   } catch (error) {
     console.log(error, "Error");
@@ -17,7 +17,7 @@ const imageProcessing = async (uri) => {
 async function geminiCall(ocrText) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: `Take this OCR output: ${ocrText}. Return a detailed recipe with a title, a list of ingredients, and a numbered list of steps`,
+    contents: `Take this OCR output: ${ocrText}. Recreate this food item, returning a detailed recipe with a title approximating what you think the food item is, a list of ingredients with their metric measurements, a list of steps and a one-sentence summary of 5-6 words.`,
     config: {
       responseMimeType: "application/json",
       responseSchema: {
@@ -40,8 +40,11 @@ async function geminiCall(ocrText) {
                 type: Type.STRING,
               },
             },
+            summary: {
+              type: Type.STRING,
+            },
           },
-          propertyOrdering: ["title", "ingredients", "steps"],
+          propertyOrdering: ["title", "ingredients", "steps", "summary"],
         },
       },
     },

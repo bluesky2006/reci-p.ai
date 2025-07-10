@@ -1,4 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import * as FileSystem from "expo-file-system";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Image,
@@ -8,20 +9,43 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { postRecipe } from "../api/api";
 
 function ResponsePreview() {
   const { result, photo } = useLocalSearchParams();
   const router = useRouter();
 
   const parsedResponse = JSON.parse(result);
-  const { title, ingredients, steps } = parsedResponse[0];
-
-  console.log(title);
-  console.log(ingredients);
-  // console.log(steps);
+  const { title, ingredients, steps, summary } = parsedResponse[0];
 
   const DATA = [{ title: title, data: ingredients }];
   console.log(DATA);
+
+  function handleSaveRecipe() {
+    console.log(photo);
+    return FileSystem.readAsStringAsync(photo, {
+      encoding: "base64",
+    })
+      .then((convertedImage) => {
+        postRecipe(
+          "686fa2589d7db59316900d39",
+          title,
+          ingredients,
+          steps,
+          convertedImage,
+          summary
+        )
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error, "<<postRecipe");
+          });
+      })
+      .catch((error) => {
+        console.log(error, "<<FileSystem");
+      });
+  }
 
   return (
     <View style={styles.responseContainer}>
@@ -52,10 +76,7 @@ function ResponsePreview() {
         <TouchableOpacity onPress={() => router.dismiss(2)}>
           <FontAwesome name="close" size={30} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.dismiss(1)}>
-          <FontAwesome name="refresh" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleSaveRecipe}>
           <FontAwesome name="check" size={30} color="black" />
         </TouchableOpacity>
       </View>
