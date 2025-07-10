@@ -12,12 +12,27 @@ import {
   View,
 } from "react-native";
 import imageProcessing from "../utils/imageProcessing";
+import * as ImagePicker from "expo-image-picker";
 
 export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef(null);
   const [uri, setUri] = useState(null);
   const router = useRouter();
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setUri(result.assets[0].uri);
+    }
+
+  };
 
   if (!permission) {
     return null;
@@ -90,6 +105,27 @@ export default function Camera() {
         />
         <View style={styles.shutterContainer}>
           <Pressable onPress={takePicture}>
+            {({ pressed }) => (
+              <View
+                style={[
+                  styles.shutterBtn,
+                  {
+                    opacity: pressed ? 0.5 : 1,
+                  },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.shutterBtnInner,
+                    {
+                      backgroundColor: "white",
+                    },
+                  ]}
+                />
+              </View>
+            )}
+          </Pressable>
+          <Pressable onPress={pickImage}>
             {({ pressed }) => (
               <View
                 style={[

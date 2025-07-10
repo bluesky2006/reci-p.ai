@@ -6,6 +6,7 @@ const ai = new GoogleGenAI({ apiKey: `${process.env.EXPO_PUBLIC_GEMINI}` });
 const imageProcessing = async (uri) => {
   try {
     const result = await TextRecognition.recognize(uri);
+    console.log(result);
     const aiResponse = await geminiCall(result[0]);
     return aiResponse;
   } catch (error) {
@@ -16,7 +17,7 @@ const imageProcessing = async (uri) => {
 async function geminiCall(ocrText) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: `Tell me what day of the week this is: ${ocrText}`,
+    contents: `Take this OCR output: ${ocrText}. Return a detailed recipe with a title, a list of ingredients, and a numbered list of steps`,
     config: {
       responseMimeType: "application/json",
       responseSchema: {
@@ -24,17 +25,28 @@ async function geminiCall(ocrText) {
         items: {
           type: Type.OBJECT,
           properties: {
-            response: {
+            title: {
               type: Type.STRING,
             },
+            ingredients: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.STRING,
+              },
+            },
+            steps: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.STRING,
+              },
+            },
           },
-          propertyOrdering: ["response"],
+          propertyOrdering: ["title", "ingredients", "steps"],
         },
       },
     },
   });
-
-  return response.text;
+  console.log(JSON.parse(response.candidates[0].content.parts[0].text));
+  return response.candidates[0].content.parts[0].text;
 }
-
 export default imageProcessing;
