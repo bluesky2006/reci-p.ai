@@ -1,8 +1,8 @@
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { fetchRecipes } from "../api/api";
 import RecipeCard from "./RecipeCard";
-import { router } from "expo-router";
 
 function RecipeList() {
   const [recipes, setRecipes] = useState([]);
@@ -20,7 +20,15 @@ function RecipeList() {
   return (
     <View style={[styles.recipeListContainer, styles.shadowProp]}>
       {recipes.map((recipe) => (
-        <Pressable key={recipe._id} onPress={()=>router.navigate('/recipe_detail')}>
+        <Pressable
+          key={recipe._id}
+          onPress={() =>
+            router.navigate({
+              pathname: "/recipe_detail",
+              params: { recipeId: recipe._id },
+            })
+          }
+        >
           <RecipeCard
             title={recipe.title}
             favourite={recipe.favourite}
