@@ -56,7 +56,7 @@ export function favouriteRecipe(recipeId, favourite) {
 }
 
 export function postRecipe(userId, title, ingredients, steps, image, summary) {
-  return fetch(`${baseUrl}/users`, {
+  return fetch(`${baseUrl}/recipes`, {
     method: "POST",
     body: JSON.stringify({
       userId,
