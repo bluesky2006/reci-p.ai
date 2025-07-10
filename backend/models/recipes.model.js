@@ -12,7 +12,15 @@ const fetchRecipe = async (db, recipeIdString) => {
   if (!recipe) throw { status: 404, message: "User not found" };
   return recipe;
 };
-const insertRecipe = async (db, title, ingredients, steps, userId) => {
+const insertRecipe = async (
+  db,
+  title,
+  ingredients,
+  steps,
+  userId,
+  image,
+  summary
+) => {
   if (
     typeof title !== "string" ||
     title.trim() === "" ||
@@ -52,6 +60,8 @@ const insertRecipe = async (db, title, ingredients, steps, userId) => {
     ingredients,
     steps,
     userId: userObjectId,
+    image,
+    summary,
   });
 
   return newRecipe.insertedId;

@@ -19,9 +19,9 @@ const getRecipe = (req, res, next) => {
 };
 
 const postRecipe = (req, res, next) => {
-  const { title, ingredients, steps, userId } = req.body;
+  const { title, ingredients, steps, userId, image, summary } = req.body;
   const db = req.app.locals.db;
-  return insertRecipe(db, title, ingredients, steps, userId)
+  return insertRecipe(db, title, ingredients, steps, userId, image, summary)
     .then((createdRecipe) => {
       res.status(201).send({ createdRecipe });
     })
