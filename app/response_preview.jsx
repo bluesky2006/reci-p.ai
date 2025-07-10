@@ -14,12 +14,8 @@ import { postRecipe } from "../api/api";
 function ResponsePreview() {
   const { result, photo } = useLocalSearchParams();
   const router = useRouter();
-
   const parsedResponse = JSON.parse(result);
   const { title, ingredients, steps, summary } = parsedResponse[0];
-
-  const DATA = [{ title: title, data: ingredients }];
-  console.log(DATA);
 
   function handleSaveRecipe() {
     console.log(photo);
