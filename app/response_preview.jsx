@@ -52,9 +52,6 @@ function ResponsePreview() {
         <TouchableOpacity onPress={() => router.dismiss(2)}>
           <FontAwesome name="close" size={30} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.dismiss(1)}>
-          <FontAwesome name="refresh" size={30} color="black" />
-        </TouchableOpacity>
         <TouchableOpacity>
           <FontAwesome name="check" size={30} color="black" />
         </TouchableOpacity>
