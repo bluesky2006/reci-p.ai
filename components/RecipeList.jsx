@@ -1,13 +1,35 @@
-import { StyleSheet, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import { fetchRecipes } from "../api/api";
 import RecipeCard from "./RecipeCard";
+import { router } from "expo-router";
 
 function RecipeList() {
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    fetchRecipes("686e88d55f1d85970d4d3ab4")
+      .then((result) => {
+        setRecipes(result.recipes);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <View style={[styles.recipeListContainer, styles.shadowProp]}>
-      <RecipeCard />
-      <RecipeCard />
-      <RecipeCard />
-      <RecipeCard />
+      {recipes.map((recipe) => (
+        <Pressable key={recipe._id} onPress={()=>router.navigate('/recipe_detail')}>
+          <RecipeCard
+            title={recipe.title}
+            favourite={recipe.favourite}
+            _id={recipe._id}
+            image={recipe.image}
+            summary={recipe.summary}
+          />
+        </Pressable>
+      ))}
     </View>
   );
 }
