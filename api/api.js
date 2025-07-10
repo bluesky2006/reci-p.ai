@@ -55,7 +55,7 @@ export function favouriteRecipe(recipeId, favourite) {
   });
 }
 
-export function postRecipe(userId, title, ingredients, steps, image) {
+export function postRecipe(userId, title, ingredients, steps, image, summary) {
   return fetch(`${baseUrl}/users`, {
     method: "POST",
     body: JSON.stringify({
@@ -64,6 +64,7 @@ export function postRecipe(userId, title, ingredients, steps, image) {
       ingredients,
       steps,
       image,
+      summary,
     }),
     headers: { "Content-type": "application/json" },
   }).then((res) => {
