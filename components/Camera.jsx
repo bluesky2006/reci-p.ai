@@ -5,7 +5,9 @@ import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Button,
+  Modal,
   Pressable,
   StyleSheet,
   Text,
@@ -16,9 +18,11 @@ import imageProcessing from "../utils/imageProcessing";
 
 export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
-  const ref = useRef(null);
   const [uri, setUri] = useState(null);
   const [image64, setImage64] = useState(null);
+  const [loadingModalVisible, setLoadingModalVisible] = useState(false);
+
+  const ref = useRef(null);
   const router = useRouter();
 
   const pickImage = async () => {
@@ -53,8 +57,9 @@ export default function Camera() {
 
   function takePicture() {
     if (ref.current) {
-      ref.current.takePictureAsync().then((photo) => {
+      ref.current.takePictureAsync({ base64: true }).then((photo) => {
         setUri(photo.uri);
+        setImage64(photo.base64);
       });
     }
   }
@@ -62,8 +67,19 @@ export default function Camera() {
   const renderPicture = () => {
     return (
       <View>
+        <Modal
+          transparent={true}
+          visible={loadingModalVisible}
+          animationType="fade"
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <ActivityIndicator size="large" />
+            </View>
+          </View>
+        </Modal>
         <ImageBackground
-          source={{ uri }}
+          source={uri}
           contentFit="contain"
           style={{
             width: "100%",
@@ -81,7 +97,9 @@ export default function Camera() {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={async () => {
+                setLoadingModalVisible(true);
                 const aiResult = await imageProcessing(uri);
+                setLoadingModalVisible(false);
                 router.navigate({
                   pathname: "/response_preview",
                   params: { result: aiResult, photo: image64 },
@@ -97,6 +115,7 @@ export default function Camera() {
   };
 
   const renderCamera = () => {
+    console.log("camera is rendering")
     return (
       <>
         <CameraView
@@ -127,27 +146,9 @@ export default function Camera() {
               </View>
             )}
           </Pressable>
-          <Pressable onPress={pickImage}>
-            {({ pressed }) => (
-              <View
-                style={[
-                  styles.shutterBtn,
-                  {
-                    opacity: pressed ? 0.5 : 1,
-                  },
-                ]}
-              >
-                <View
-                  style={[
-                    styles.shutterBtnInner,
-                    {
-                      backgroundColor: "white",
-                    },
-                  ]}
-                />
-              </View>
-            )}
-          </Pressable>
+          <TouchableOpacity onPress={pickImage}>
+            <FontAwesome name="upload" size={80} color="white" />
+          </TouchableOpacity>
         </View>
       </>
     );
@@ -204,5 +205,28 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 50,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    textAlign: "center",
   },
 });

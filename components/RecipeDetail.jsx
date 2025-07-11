@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   Button,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -63,7 +64,7 @@ const RecipeDetail = () => {
   }
 
   return (
-    <View>
+    <ScrollView>
       <Image
         style={styles.recipeImage}
         source={{ uri: `data:image/jpeg;base64,${recipe.image}` }}
@@ -90,7 +91,7 @@ const RecipeDetail = () => {
       })}
       <Button onPress={handleDelete} title="Delete recipe" />
       <Button onPress={() => router.back()} title="Home" />
-    </View>
+    </ScrollView>
   );
 };
 

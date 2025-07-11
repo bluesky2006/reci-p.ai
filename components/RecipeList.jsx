@@ -47,7 +47,7 @@ function RecipeList() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      {recipes.map((recipe) => (
+      {recipes.toReversed().map((recipe) => (
         <Pressable
           key={recipe._id}
           onPress={() =>

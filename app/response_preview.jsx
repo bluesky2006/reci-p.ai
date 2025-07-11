@@ -27,8 +27,8 @@ function ResponsePreview() {
       photo,
       summary
     )
-      .then((response) => {
-        console.log(response);
+      .then(() => {
+        router.dismissAll();
       })
       .catch((error) => {
         console.log(error, "<<postRecipe");
@@ -40,7 +40,7 @@ function ResponsePreview() {
       <View style={styles.imageContainer}>
         <Image
           style={{ height: "100%", width: "100%" }}
-          source={{ uri: photo }}
+          source={{ uri: `data:image/jpeg;base64,${photo}` }}
         />
       </View>
       <ScrollView style={styles.sectionListContainer}>
