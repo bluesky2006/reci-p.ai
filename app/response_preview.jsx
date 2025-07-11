@@ -1,5 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import * as FileSystem from "expo-file-system";
+// import * as FileSystem from "expo-file-system";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Image,
@@ -18,32 +18,21 @@ function ResponsePreview() {
   const parsedResponse = JSON.parse(result);
   const { title, ingredients, steps, summary } = parsedResponse[0];
 
-  const DATA = [{ title: title, data: ingredients }];
-  console.log(DATA);
-
   function handleSaveRecipe() {
     console.log(photo);
-    return FileSystem.readAsStringAsync(photo, {
-      encoding: "base64",
-    })
-      .then((convertedImage) => {
-        postRecipe(
-          "686fa2589d7db59316900d39",
-          title,
-          ingredients,
-          steps,
-          convertedImage,
-          summary
-        )
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((error) => {
-            console.log(error, "<<postRecipe");
-          });
+    return postRecipe(
+      "686fa2589d7db59316900d39",
+      title,
+      ingredients,
+      steps,
+      photo,
+      summary
+    )
+      .then((response) => {
+        console.log(response);
       })
       .catch((error) => {
-        console.log(error, "<<FileSystem");
+        console.log(error, "<<postRecipe");
       });
   }
 

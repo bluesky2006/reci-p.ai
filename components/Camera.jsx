@@ -1,6 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { ImageBackground } from "expo-image";
+import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
@@ -12,26 +13,27 @@ import {
   View,
 } from "react-native";
 import imageProcessing from "../utils/imageProcessing";
-import * as ImagePicker from "expo-image-picker";
 
 export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef(null);
   const [uri, setUri] = useState(null);
+  const [image64, setImage64] = useState(null);
   const router = useRouter();
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    let photoResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
 
-    if (!result.canceled) {
-      setUri(result.assets[0].uri);
+    if (!photoResult.canceled) {
+      setUri(photoResult.assets[0].uri);
+      setImage64(photoResult.assets[0].base64);
     }
-
   };
 
   if (!permission) {
@@ -82,7 +84,7 @@ export default function Camera() {
                 const aiResult = await imageProcessing(uri);
                 router.navigate({
                   pathname: "/response_preview",
-                  params: { result: aiResult, photo: uri },
+                  params: { result: aiResult, photo: image64 },
                 });
               }}
             >
