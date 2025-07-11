@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import RecipeList from "../components/RecipeList";
 // import CameraView from "./CameraView"
+import "../global.css";
 
 function HomePage() {
   const router = useRouter();
