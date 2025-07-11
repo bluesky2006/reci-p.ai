@@ -1,13 +1,13 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import TextRecognition from "react-native-text-recognition";
+import { extractTextFromImage } from "expo-text-extractor";
 
 const ai = new GoogleGenAI({ apiKey: `${process.env.EXPO_PUBLIC_GEMINI}` });
 
 const imageProcessing = async (uri) => {
   try {
-    const result = await TextRecognition.recognize(uri);
+    const result = await extractTextFromImage(uri);
     console.log(result);
-    const aiResponse = await geminiCall(result);
+    const aiResponse = await geminiCall(result.join(" "));
     return aiResponse;
   } catch (error) {
     console.log(error, "Error");
