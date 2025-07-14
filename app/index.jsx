@@ -43,24 +43,3 @@ export default function Main() {
       console.log(e);
     }
   };
-
-  return (
-    <>
-      {/* Google */}
-      <TouchableOpacity
-        onPress={() => {
-          promptAsync()
-            .then((response) => {
-              console.log(response);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }}
-        activeOpacity={0.7}
-      >
-        <Button title="Login" />
-      </TouchableOpacity>
-    </>
-  );
-}
