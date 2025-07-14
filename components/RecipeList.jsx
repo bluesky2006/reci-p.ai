@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import {
   Pressable,
   RefreshControl,
@@ -8,13 +8,16 @@ import {
 } from "react-native";
 import { fetchRecipes } from "../api/api";
 import RecipeCard from "./RecipeCard";
+import { UserContext } from "../contexts/UserContext";
 
 function RecipeList() {
   const [recipes, setRecipes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
+
   useEffect(() => {
-    fetchRecipes("686fa2589d7db59316900d39")
+    fetchRecipes(loggedInUserId)
       .then((result) => {
         setRecipes(result.recipes);
       })
@@ -26,7 +29,7 @@ function RecipeList() {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
-      fetchRecipes("686fa2589d7db59316900d39")
+      fetchRecipes(loggedInUserId)
         .then((result) => {
           console.log(result.recipes[0].favourite, "asdasdf");
           setRecipes(result.recipes);

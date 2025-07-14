@@ -1,13 +1,18 @@
 import {
   GoogleSignin,
-  statusCodes,
   GoogleSigninButton,
-  isSuccessResponse,
   isErrorWithCode,
+  isSuccessResponse,
+  statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { useContext, useState } from "react";
+import { Button, View } from "react-native";
+import { fetchUserByEmail, postUser } from "../api/api";
+import {UserContext} from '../contexts/UserContext'
 import { router } from "expo-router";
 
 export default function Main() {
+  const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
   const [user, setUser] = useState(null);
 
   GoogleSignin.configure();
@@ -17,9 +22,19 @@ export default function Main() {
       await GoogleSignin.hasPlayServices();
       const response = await GoogleSignin.signIn();
       if (isSuccessResponse(response)) {
-        setUser({ userInfo: response.data });
-        getCurrentUser()
-        router.navigate("/home");
+        setUser(response.data);
+        console.log(user.user);
+        fetchUserByEmail(user.user.email).then((res)=>{
+          setLoggedInUserId(res._id)
+        }).catch((err)=> {
+          postUser(user.user.email, user.user.name).then((res)=>{
+            setLoggedInUserId(res._id)
+          }).catch((err)=>{
+            console.log(err)
+          })
+        }).finally(()=>{
+          router.navigate("/home");
+        })
       } else {
         // sign in was cancelled by user
       }
@@ -50,11 +65,6 @@ export default function Main() {
     }
   };
 
-  const getCurrentUser = async () => {
-    const currentUser = GoogleSignin.getCurrentUser();
-    console.log(currentUser)
-  };
-  
   return (
     <>
       <View>
@@ -65,9 +75,8 @@ export default function Main() {
             signIn();
           }}
         />
-        <Button onPress={() => signOut()} title="Sign Out" disabled={!user} />;
+        <Button onPress={() => signOut()} title="Sign Out" disabled={!user} />
       </View>
-
     </>
   );
 }

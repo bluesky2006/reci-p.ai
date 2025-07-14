@@ -10,17 +10,21 @@ import {
   View,
 } from "react-native";
 import { postRecipe } from "../api/api";
+import { useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 
 function ResponsePreview() {
   const { result, photo } = useLocalSearchParams();
   const router = useRouter();
   const parsedResponse = JSON.parse(result);
   const { title, ingredients, steps, summary } = parsedResponse[0];
+    const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
+  
 
   function handleSaveRecipe() {
     console.log(photo);
     return postRecipe(
-      "686fa2589d7db59316900d39",
+      loggedInUserId,
       title,
       ingredients,
       steps,

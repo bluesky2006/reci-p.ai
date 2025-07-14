@@ -7,6 +7,13 @@ export function fetchUser(userId) {
   });
 }
 
+export function fetchUserByEmail(email) {
+  return fetch(`${baseUrl}/users/email/${email}`).then((res) => {
+    if (!res.ok) throw new Error("Failed to fetch user");
+    return res.json();
+  });
+}
+
 export function postUser(username, name) {
   //need to update with google auth stuff
   return fetch(`${baseUrl}/users`, {
