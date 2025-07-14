@@ -39,4 +39,9 @@ const fetchUserRecipes = async (db, userIdString) => {
   return recipes;
 };
 
-module.exports = { fetchUser, insertUser, fetchUserRecipes };
+module.exports = {
+  fetchUser,
+  insertUser,
+  fetchUserRecipes,
+  fetchUserByUsername,
+};

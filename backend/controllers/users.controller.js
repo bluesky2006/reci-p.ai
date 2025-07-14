@@ -2,7 +2,7 @@ const {
   fetchUser,
   insertUser,
   fetchUserRecipes,
-  fetchUserByEmail,
+  fetchUserByUsername,
 } = require("../models/users.model");
 
 const getUser = (req, res, next) => {
@@ -17,10 +17,10 @@ const getUser = (req, res, next) => {
     });
 };
 
-const getUserByEmail = (req, res, next) => {
+const getUserByUsername = (req, res, next) => {
   const { email } = req.params;
   const db = req.app.locals.db;
-  return fetchUserByEmail(db, email)
+  return fetchUserByUsername(db, email)
     .then((user) => {
       res.status(200).send(user);
     })
@@ -60,4 +60,4 @@ const getUserRecipes = (req, res, next) => {
       next(err);
     });
 };
-module.exports = { getUser, postUser, getUserRecipes, getUserByEmail };
+module.exports = { getUser, postUser, getUserRecipes, getUserByUsername };
