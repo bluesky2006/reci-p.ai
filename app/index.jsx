@@ -1,68 +1,73 @@
-import { useEffect, useState } from "react";
-import { Button, TouchableOpacity } from "react-native";
-
-import "../global.css";
-
-import * as Google from "expo-auth-session/providers/google";
-
-// Please refer Section 2 below for obtaining Credentials
-const GOOGLE_ANDROID_CLIENT_ID = process.env.EXPO_PUBLIC_ANDROID;
-const GOOGLE_iOS_CLIENT_ID = process.env.EXPO_PUBLIC_IOS;
+import {
+  GoogleSignin,
+  statusCodes,
+  GoogleSigninButton,
+  isSuccessResponse,
+  isErrorWithCode,
+} from "@react-native-google-signin/google-signin";
+import { router } from "expo-router";
 
 export default function Main() {
-  const [userInfo, setUserInfo] = useState("");
+  const [user, setUser] = useState(null);
 
-  /******************** Google SignIn *********************/
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-    iosClientId: GOOGLE_iOS_CLIENT_ID,
-  });
+  GoogleSignin.configure();
 
-  useEffect(() => {
-    handleSignInWithGoogle();
-  }, [response]);
-
-  const handleSignInWithGoogle = async () => {
-    if (response?.type === "success") {
-      await getUserInfo(response.authentication.accessToken);
-    }
-  };
-
-  const getUserInfo = async (token) => {
+  const signIn = async () => {
     try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
+      await GoogleSignin.hasPlayServices();
+      const response = await GoogleSignin.signIn();
+      if (isSuccessResponse(response)) {
+        setUser({ userInfo: response.data });
+        getCurrentUser()
+        router.navigate("/home");
+      } else {
+        // sign in was cancelled by user
+      }
+    } catch (error) {
+      if (isErrorWithCode(error)) {
+        switch (error.code) {
+          case statusCodes.IN_PROGRESS:
+            // operation (eg. sign in) already in progress
+            break;
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+            // Android only, play services not available or outdated
+            break;
+          default:
+          // some other error happened
         }
-      );
-
-      const user = await response.json();
-
-      console.log(user);
-      setUserInfo(user);
-    } catch (e) {
-      console.log(e);
+      } else {
+        // an error that's not related to google sign in occurred
+      }
     }
   };
 
+  const signOut = async () => {
+    try {
+      await GoogleSignin.signOut();
+      setUser(null); // Remember to remove the user from your app's state as well
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getCurrentUser = async () => {
+    const currentUser = GoogleSignin.getCurrentUser();
+    console.log(currentUser)
+  };
+  
   return (
     <>
-      {/* Google */}
-      <TouchableOpacity
-        onPress={() => {
-          promptAsync()
-            .then((response) => {
-              console.log(response);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }}
-        activeOpacity={0.7}
-      >
-        <Button title="Login" />
-      </TouchableOpacity>
+      <View>
+        <GoogleSigninButton
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={() => {
+            signIn();
+          }}
+        />
+        <Button onPress={() => signOut()} title="Sign Out" disabled={!user} />;
+      </View>
+
     </>
   );
 }
