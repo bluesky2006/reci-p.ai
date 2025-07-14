@@ -9,6 +9,14 @@ const fetchUser = async (db, userIdString) => {
   return user;
 };
 
+const fetchUserByUsername = async (db, email) => {
+  const user = await db.collection("users").findOne({ username: email });
+  if (!user) {
+    throw { status: 404, message: "User not found" };
+  }
+  return user;
+};
+
 const insertUser = async (db, username, name) => {
   const usernameCheck = await db.collection("users").findOne({ username });
   if (usernameCheck) {
