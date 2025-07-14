@@ -1,3 +1,4 @@
+import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { ImageBackground } from "expo-image";
@@ -9,6 +10,7 @@ import {
   Button,
   Modal,
   Pressable,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -29,7 +31,7 @@ export default function Camera() {
     let photoResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [1, 1],
       quality: 1,
       base64: true,
     });
@@ -66,56 +68,63 @@ export default function Camera() {
 
   const renderPicture = () => {
     return (
-      <View>
-        <Modal
-          transparent={true}
-          visible={loadingModalVisible}
-          animationType="fade"
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ActivityIndicator size="large" />
+      <SafeAreaView>
+        <View style={{ padding: 15 }}>
+          <ImageBackground
+            source={uri}
+            contentFit="cover"
+            imageStyle={{ borderRadius: 15 }}
+            style={{
+              width: "100%",
+              aspectRatio: 1 / 1.9,
+              flex: 1,
+              borderStyle: "dashed",
+              borderColor: "#191460",
+              borderWidth: 1,
+              borderRadius: 15,
+            }}
+          ></ImageBackground>
+          <Modal
+            transparent={true}
+            visible={loadingModalVisible}
+            animationType="fade"
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <ActivityIndicator size="large" />
+                <Text style={{ marginTop: 15 }}>Processing...</Text>
+              </View>
             </View>
-          </View>
-        </Modal>
-        <ImageBackground
-          source={uri}
-          contentFit="contain"
-          style={{
-            width: "100%",
-            height: "100%",
-            aspectRatio: 1,
-            flex: 1,
-          }}
-        >
-          <View style={styles.previewButtonContainer}>
-            <TouchableOpacity onPress={() => router.back()}>
-              <FontAwesome name="close" size={30} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setUri(null)}>
-              <FontAwesome name="refresh" size={30} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={async () => {
-                setLoadingModalVisible(true);
-                const aiResult = await imageProcessing(uri);
-                setLoadingModalVisible(false);
-                router.navigate({
-                  pathname: "/response_preview",
-                  params: { result: aiResult, photo: image64 },
-                });
-              }}
-            >
-              <FontAwesome name="check" size={30} color="black" />
-            </TouchableOpacity>
-          </View>
-        </ImageBackground>
-      </View>
+          </Modal>
+        </View>
+        <View style={styles.previewButtonContainer}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <AntDesign name="close" size={40} color="#191460" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={async () => {
+              setLoadingModalVisible(true);
+              const aiResult = await imageProcessing(uri);
+              setLoadingModalVisible(false);
+              router.navigate({
+                pathname: "/response_preview",
+                params: { result: aiResult, photo: image64 },
+              });
+            }}
+          >
+            <View style={styles.checkButton} x>
+              <AntDesign name="check" size={50} color="white" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setUri(null)}>
+            <AntDesign name="reload1" size={40} color="#191460" />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     );
   };
 
   const renderCamera = () => {
-    console.log("camera is rendering")
     return (
       <>
         <CameraView
@@ -124,8 +133,11 @@ export default function Camera() {
           mute={false}
           responsiveOrientationWhenOrientationLocked
         />
-        <View style={styles.shutterContainer}>
-          <Pressable onPress={takePicture}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <AntDesign name="arrowleft" size={40} color="#191460" />
+          </TouchableOpacity>
+          <Pressable style={styles.button} onPress={takePicture}>
             {({ pressed }) => (
               <View
                 style={[
@@ -139,7 +151,7 @@ export default function Camera() {
                   style={[
                     styles.shutterBtnInner,
                     {
-                      backgroundColor: "white",
+                      backgroundColor: "#191460",
                     },
                   ]}
                 />
@@ -147,7 +159,7 @@ export default function Camera() {
             )}
           </Pressable>
           <TouchableOpacity onPress={pickImage}>
-            <FontAwesome name="upload" size={80} color="white" />
+            <FontAwesome name="upload" size={40} color="#191460" />
           </TouchableOpacity>
         </View>
       </>
@@ -172,34 +184,55 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
-  shutterContainer: {
-    position: "absolute",
-    bottom: 60,
-    width: "100%",
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    backgroundColor: "white",
+    borderColor: "#191460",
+    borderWidth: 0.5,
+    borderRadius: 15,
     alignItems: "center",
-    paddingHorizontal: 30,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 0,
   },
   previewButtonContainer: {
-    position: "absolute",
-    bottom: 60,
-    left: "30%",
-    width: "40%",
+    flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
-    gap: 75,
+    justifyContent: "space-evenly",
     backgroundColor: "white",
-    padding: 30,
-    borderRadius: 20,
+    borderColor: "#191460",
+    borderWidth: 0.5,
+    borderRadius: 15,
+    alignItems: "center",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingTop: 3,
+    paddingBottom: 3,
+  },
+  checkButton: {
+    bottom: 20,
+    backgroundColor: "#191460",
+    padding: 13,
+    borderRadius: 50,
+    borderColor: "#191460",
+    borderWidth: 1,
   },
   shutterBtn: {
-    backgroundColor: "transparent",
+    backgroundColor: "white",
     borderWidth: 5,
-    borderColor: "white",
+    borderColor: "#191460",
     width: 85,
     height: 85,
     borderRadius: 45,
     alignItems: "center",
     justifyContent: "center",
+    bottom: 20,
   },
   shutterBtnInner: {
     width: 70,
@@ -212,7 +245,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    margin: 20,
+    margin: 15,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,

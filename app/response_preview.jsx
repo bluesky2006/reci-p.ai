@@ -3,6 +3,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Image,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -36,7 +37,7 @@ function ResponsePreview() {
   }
 
   return (
-    <View style={styles.responseContainer}>
+    <SafeAreaView style={styles.responseContainer}>
       <View style={styles.imageContainer}>
         <Image
           style={{ height: "100%", width: "100%" }}
@@ -68,12 +69,13 @@ function ResponsePreview() {
           <FontAwesome name="check" size={30} color="black" />
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   responseContainer: {
+    flex: 1,
     flexDirection: "column",
     padding: 15,
     backgroundColor: "white",

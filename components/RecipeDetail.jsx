@@ -3,8 +3,8 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  Button,
   Image,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -65,10 +65,13 @@ const RecipeDetail = () => {
   }
 
   return (
-    <View style={{ backgroundColor: "#191460" }}>
-      <View style={styles.titleTextBox}>
+    <SafeAreaView style={{ backgroundColor: "#191460" }}>
+      <TouchableOpacity
+        style={styles.titleTextBox}
+        onPress={() => router.back()}
+      >
         <AntDesign name="arrowleft" size={24} color="white" />
-      </View>
+      </TouchableOpacity>
       <ScrollView style={styles.pageContainer}>
         <View style={styles.titleContainer}>
           <Image
@@ -78,9 +81,7 @@ const RecipeDetail = () => {
           <View style={styles.textBoxCard}>
             <Text style={styles.recipeTitle}>{recipe.title}</Text>
             <View style={styles.faveDelete}>
-              <TouchableOpacity onPress={handleDelete}>
-                <FontAwesome name="trash" size={24} color="black" />
-              </TouchableOpacity>
+              <View></View>
               <TouchableOpacity onPress={handleFavourite}>
                 {isFavourite ? (
                   <AntDesign name="heart" size={20} color="red" />
@@ -88,9 +89,19 @@ const RecipeDetail = () => {
                   <AntDesign name="hearto" size={20} color="black" />
                 )}
               </TouchableOpacity>
+              <TouchableOpacity onPress={handleDelete}>
+                <FontAwesome name="trash" size={24} color="black" />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
+        <View
+          style={{
+            borderBottomColor: "black",
+            borderBottomWidth: 0.5,
+            marginVertical: 5,
+          }}
+        />
         <Text style={styles.heading}>Ingredients</Text>
         {recipe.ingredients?.map((ingredient, index) => {
           return (
@@ -107,9 +118,9 @@ const RecipeDetail = () => {
             </Text>
           );
         })}
-        <Button onPress={() => router.back()} title="Home" />
+        <View style={{ height: 40 }}></View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -120,6 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 15,
     backgroundColor: "white",
+    marginBottom: 30,
   },
   titleTextBox: {
     borderBottomColor: "#191460",
@@ -139,7 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   recipeTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
   },
   textBoxCard: { flexShrink: 1 },
@@ -149,8 +161,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-end",
   },
-  heading: { fontWeight: "bold", fontSize: 16, marginVertical: 10 },
-  bodyText: { marginVertical: 5 },
+  heading: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 10,
+    marginTop: 15,
+  },
+  bodyText: { marginVertical: 5, lineHeight: 18 },
 });
 
 export default RecipeDetail;

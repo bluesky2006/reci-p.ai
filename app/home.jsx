@@ -2,7 +2,13 @@ import { Jura_700Bold } from "@expo-google-fonts/jura/700Bold";
 import { useFonts } from "@expo-google-fonts/jura/useFonts";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import RecipeList from "../components/RecipeList";
 
 function HomePage() {
@@ -15,7 +21,7 @@ function HomePage() {
     return null;
   } else {
     return (
-      <View style={styles.homePageContainer}>
+      <SafeAreaView style={styles.homePageContainer}>
         <View style={styles.titleTextBox}>
           <Text style={styles.titleText}>reci-p.ai</Text>
         </View>
@@ -31,7 +37,7 @@ function HomePage() {
             <AntDesign name="pluscircle" size={75} color="#191460" />
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -71,7 +77,7 @@ const styles = StyleSheet.create({
   avatar: {
     position: "absolute",
     right: 15,
-    top: 23,
+    top: 90,
   },
 });
 
