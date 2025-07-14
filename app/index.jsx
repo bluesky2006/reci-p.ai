@@ -1,11 +1,13 @@
 import {
   GoogleSignin,
-  statusCodes,
   GoogleSigninButton,
-  isSuccessResponse,
   isErrorWithCode,
+  isSuccessResponse,
+  statusCodes,
 } from "@react-native-google-signin/google-signin";
 import { router } from "expo-router";
+import { useState } from "react";
+import { Button, View } from "react-native";
 
 export default function Main() {
   const [user, setUser] = useState(null);
@@ -18,7 +20,7 @@ export default function Main() {
       const response = await GoogleSignin.signIn();
       if (isSuccessResponse(response)) {
         setUser({ userInfo: response.data });
-        getCurrentUser()
+        getCurrentUser();
         router.navigate("/home");
       } else {
         // sign in was cancelled by user
@@ -52,9 +54,9 @@ export default function Main() {
 
   const getCurrentUser = async () => {
     const currentUser = GoogleSignin.getCurrentUser();
-    console.log(currentUser)
+    console.log(currentUser);
   };
-  
+
   return (
     <>
       <View>
@@ -67,7 +69,6 @@ export default function Main() {
         />
         <Button onPress={() => signOut()} title="Sign Out" disabled={!user} />;
       </View>
-
     </>
   );
 }
