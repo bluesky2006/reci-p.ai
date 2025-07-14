@@ -1,6 +1,7 @@
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { Button, Image, StyleSheet, View } from "react-native";
+import "../global.css";
 
 function ImagePickerExample() {
   const [image, setImage] = useState(null);
