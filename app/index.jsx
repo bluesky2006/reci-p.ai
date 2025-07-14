@@ -65,11 +65,6 @@ export default function Main() {
     }
   };
 
-  const getCurrentUser = async () => {
-    const currentUser = GoogleSignin.getCurrentUser();
-    console.log(currentUser);
-  };
-
   return (
     <>
       <View>
@@ -80,7 +75,7 @@ export default function Main() {
             signIn();
           }}
         />
-        <Button onPress={() => signOut()} title="Sign Out" disabled={!user} />;
+        <Button onPress={() => signOut()} title="Sign Out" disabled={!user} />
       </View>
     </>
   );
