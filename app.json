@@ -24,7 +24,8 @@
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.beyondmvps.recipai"
     },
     "web": {
       "bundler": "metro",

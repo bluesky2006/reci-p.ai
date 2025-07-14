@@ -13,10 +13,12 @@
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
     "@google/genai": "^1.8.0",
+    "@react-native-google-signin/google-signin": "^15.0.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
     "expo": "53.0.19",
+    "expo-auth-session": "~6.2.1",
     "expo-blur": "~14.1.5",
     "expo-camera": "~16.1.10",
     "expo-constants": "~17.1.7",
@@ -45,8 +47,7 @@
     "react-native-svg": "15.11.2",
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
-    "tesseract.js": "^6.0.1",
-    "expo-auth-session": "~6.2.1"
+    "tesseract.js": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

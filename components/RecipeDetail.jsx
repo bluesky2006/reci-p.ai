@@ -13,6 +13,7 @@ import {
 import { deleteRecipe, favouriteRecipe, fetchRecipe } from "../api/api";
 
 const RecipeDetail = () => {
+  
   const { recipeId } = useLocalSearchParams();
   const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
