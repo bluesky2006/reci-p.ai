@@ -7,9 +7,6 @@ import {
 } from "@react-native-google-signin/google-signin";
 import { router } from "expo-router";
 
-import { useState } from "react";
-import { Button, View } from "react-native";
-
 export default function Main() {
   const [user, setUser] = useState(null);
 
@@ -70,6 +67,7 @@ export default function Main() {
         />
         <Button onPress={() => signOut()} title="Sign Out" disabled={!user} />;
       </View>
+
     </>
   );
 }
