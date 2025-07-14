@@ -5,11 +5,12 @@ import {
   isSuccessResponse,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-import { router } from "expo-router";
 import { useState } from "react";
 import { Button, View } from "react-native";
+import { fetchUserByEmail } from "../api/api";
 
 export default function Main() {
+  // const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
   const [user, setUser] = useState(null);
 
   GoogleSignin.configure();
@@ -20,8 +21,10 @@ export default function Main() {
       const response = await GoogleSignin.signIn();
       if (isSuccessResponse(response)) {
         setUser({ userInfo: response.data });
-        getCurrentUser();
-        router.navigate("/home");
+        console.log(user.userInfo.user.email);
+        const userObject = await fetchUserByEmail(user.userInfo.user.email);
+        console.log(userObject, "userObject");
+        // router.navigate("/home");
       } else {
         // sign in was cancelled by user
       }
