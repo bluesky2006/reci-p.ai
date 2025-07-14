@@ -1,41 +1,45 @@
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { useRouter } from "expo-router";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import RecipeList from "../components/RecipeList";
-// import CameraView from "./CameraView"
-import "../global.css";
+import { useEffect, useState } from "react";
+import { Button, TouchableOpacity } from "react-native";
 
-function HomePage() {
-  const router = useRouter();
-  return (
-    <View style={styles.homePageContainer}>
-      <RecipeList />
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={() => router.navigate("/camera_screen")}
-      >
-        <AntDesign
-          name="pluscircle"
-          size={60}
-          color="black"
-          style={styles.button}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-}
+import * as Google from "expo-auth-session/providers/google";
 
-const styles = StyleSheet.create({
-  homePageContainer: {
-    flex: 1,
-    flexDirection: "column",
-    padding: 15,
-    backgroundColor: "white",
-  },
-  buttonContainer: {
-    marginVertical: "auto",
-    alignItems: "center",
-  },
-});
+// Please refer Section 2 below for obtaining Credentials
+const GOOGLE_ANDROID_CLIENT_ID = process.env.EXPO_PUBLIC_ANDROID;
+const GOOGLE_iOS_CLIENT_ID = process.env.EXPO_PUBLIC_IOS;
 
-export default HomePage;
+export default function Main() {
+  const [userInfo, setUserInfo] = useState("");
+
+  /******************** Google SignIn *********************/
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+    iosClientId: GOOGLE_iOS_CLIENT_ID,
+  });
+
+  useEffect(() => {
+    handleSignInWithGoogle();
+  }, [response]);
+
+  const handleSignInWithGoogle = async () => {
+    if (response?.type === "success") {
+      await getUserInfo(response.authentication.accessToken);
+    }
+  };
+
+  const getUserInfo = async (token) => {
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const user = await response.json();
+
+      console.log(user);
+      setUserInfo(user);
+    } catch (e) {
+      console.log(e);
+    }
+  };
