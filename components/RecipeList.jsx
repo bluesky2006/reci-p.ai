@@ -1,30 +1,42 @@
 import { router } from "expo-router";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import {
+  ActivityIndicator,
+  Modal,
   Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
+  View,
 } from "react-native";
 import { fetchRecipes } from "../api/api";
 import RecipeCard from "./RecipeCard";
 import { UserContext } from "../contexts/UserContext";
+import { useFocusEffect } from "@react-navigation/native";
 
 function RecipeList() {
   const [recipes, setRecipes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(()=>{
+      setIsLoading(true);
     fetchRecipes(loggedInUserId)
       .then((result) => {
+        console.log("fetching")
         setRecipes(result.recipes);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [recipes]);
+      return () => {}
+    }, [])
+  )
+
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -49,6 +61,17 @@ function RecipeList() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
+      {isLoading && (
+        <View>
+          <Modal transparent={true} visible={isLoading} animationType="fade">
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <ActivityIndicator size="large" />
+              </View>
+            </View>
+          </Modal>
+        </View>
+      )}
       {recipes.toReversed().map((recipe) => (
         <Pressable
           key={recipe._id}
@@ -80,6 +103,17 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     backgroundColor: "white",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 15,
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
   },
 });
 
