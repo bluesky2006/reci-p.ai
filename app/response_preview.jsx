@@ -3,7 +3,6 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,19 +10,21 @@ import {
   View,
 } from "react-native";
 import { postRecipe } from "../api/api";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function ResponsePreview() {
   const { result, photo } = useLocalSearchParams();
   const router = useRouter();
   const parsedResponse = JSON.parse(result);
   const { title, ingredients, steps, summary } = parsedResponse[0];
-    const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
+  const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
+  const [isDisabled, setIsDisabled] = useState(false)
   
 
   function handleSaveRecipe() {
-    console.log(photo);
+    setIsDisabled(true)
     return postRecipe(
       loggedInUserId,
       title,
@@ -33,11 +34,13 @@ function ResponsePreview() {
       summary
     )
       .then(() => {
-        router.dismissAll();
+        router.dismissTo('/home');
       })
       .catch((error) => {
         console.log(error, "<<postRecipe");
-      });
+      }).finally(()=>{
+        setIsDisabled(false)
+      })
   }
 
   return (
@@ -66,10 +69,10 @@ function ResponsePreview() {
         </View>
       </ScrollView>
       <View style={styles.previewButtonContainer}>
-        <TouchableOpacity onPress={() => router.dismiss(2)}>
+        <TouchableOpacity onPress={() => router.dismiss(2)} disabled={isDisabled}>
           <FontAwesome name="close" size={30} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleSaveRecipe}>
+        <TouchableOpacity onPress={handleSaveRecipe} disabled={isDisabled}>
           <FontAwesome name="check" size={30} color="black" />
         </TouchableOpacity>
       </View>

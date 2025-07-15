@@ -24,14 +24,13 @@ export default function Main() {
       await GoogleSignin.hasPlayServices();
       const response = await GoogleSignin.signIn();
       if (isSuccessResponse(response)) {
-        setUser(response.data);
-        console.log(user.user);
-        fetchUserByEmail(user.user.email)
+        setUser(response.data)
+        fetchUserByEmail(response.data.user.email)
           .then((res) => {
             setLoggedInUserId(res._id);
           })
           .catch((err) => {
-            postUser(user.user.email, user.user.name)
+            postUser(response.data.user.email, response.data.user.name)
               .then((res) => {
                 setLoggedInUserId(res._id);
               })

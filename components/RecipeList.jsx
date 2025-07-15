@@ -31,7 +31,6 @@ function RecipeList() {
     setTimeout(() => {
       fetchRecipes(loggedInUserId)
         .then((result) => {
-          console.log(result.recipes[0].favourite, "asdasdf");
           setRecipes(result.recipes);
         })
         .catch((err) => {

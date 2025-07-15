@@ -1,15 +1,14 @@
-import { Jura_700Bold } from "@expo-google-fonts/jura/700Bold";
-import { useFonts } from "@expo-google-fonts/jura/useFonts";
+import { useFonts, Jura_700Bold } from "@expo-google-fonts/jura";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import RecipeList from "../components/RecipeList";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function HomePage() {
   let [fontsLoaded] = useFonts({
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
   button: { bottom: 20 },
   titleText: {
     fontSize: 32,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     textAlign: "center",
     color: "white",
     fontFamily: "Jura_700Bold",

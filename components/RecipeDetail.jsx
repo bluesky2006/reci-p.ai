@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { deleteRecipe, favouriteRecipe, fetchRecipe } from "../api/api";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const RecipeDetail = () => {
   
@@ -19,6 +19,7 @@ const RecipeDetail = () => {
   const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFavourite, setIsFavourite] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false)
   const router = useRouter();
 
   useEffect(() => {
@@ -47,6 +48,7 @@ const RecipeDetail = () => {
   }
 
   function handleDelete() {
+    setIsDeleting(true)
     deleteRecipe(recipeId)
       .then(() => {
         router.back();
@@ -54,7 +56,9 @@ const RecipeDetail = () => {
       .catch((err) => {
         console.log(err);
         return <Text>Failed to delete</Text>;
-      });
+      }).finally(()=>{    
+        setIsDeleting(false)
+      })
   }
 
   if (isLoading) {
@@ -90,7 +94,7 @@ const RecipeDetail = () => {
                   <AntDesign name="hearto" size={20} color="black" />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleDelete}>
+              <TouchableOpacity onPress={handleDelete} disabled={isDeleting}>
                 <FontAwesome name="trash" size={24} color="black" />
               </TouchableOpacity>
             </View>

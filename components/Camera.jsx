@@ -10,13 +10,13 @@ import {
   Button,
   Modal,
   Pressable,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import imageProcessing from "../utils/imageProcessing";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -110,7 +110,7 @@ export default function Camera() {
                 pathname: "/response_preview",
                 params: { result: aiResult, photo: image64 },
               });
-            }}
+            }} disabled={loadingModalVisible}
           >
             <View style={styles.checkButton} x>
               <AntDesign name="check" size={50} color="white" />
