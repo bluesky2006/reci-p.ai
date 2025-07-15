@@ -5,10 +5,14 @@ import { useRouter } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RecipeList from "../components/RecipeList";
+import { useEffect, useState } from "react";
 
 function HomePage() {
-  const currentUser = GoogleSignin.getCurrentUser();
-  console.log(currentUser);
+  const [user, setUser] = useState(null)
+  
+  useEffect(()=>{
+    setUser(GoogleSignin.getCurrentUser())
+  }, [])
 
   let [fontsLoaded] = useFonts({
     Jura_700Bold,
@@ -28,7 +32,7 @@ function HomePage() {
           onPress={() => router.navigate("/profile")}
         >
           <Image
-            source={{ uri: currentUser.user.photo }}
+            source={{ uri: user.user.photo }}
             style={{
               height: 50,
               width: 50,
