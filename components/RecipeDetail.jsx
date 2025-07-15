@@ -52,7 +52,7 @@ const RecipeDetail = () => {
   }
 
   function handleDelete() {
-    setLoadingModalVisible(false)
+    setLoadingModalVisible(false);
     setIsDeleting(true);
     deleteRecipe(recipeId)
       .then(() => {
@@ -90,13 +90,36 @@ const RecipeDetail = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{ marginTop: 15 }}>Delete?</Text>
-            <Button onPress={()=>{handleDelete()}} title='Yes'/>
-            <Button onPress={()=>{setLoadingModalVisible(false)}} title='No'/>
+            <Text style={{ marginVertical: 15, fontSize: 18 }}>
+              Are you sure you want to delete?
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 50,
+              }}
+            >
+              <Button
+                style={styles.modalButtons}
+                onPress={() => {
+                  setLoadingModalVisible(false);
+                }}
+                title="Cancel"
+                color="#00000082"
+              />
+              <Button
+                style={styles.modalButtons}
+                onPress={() => {
+                  handleDelete();
+                }}
+                title="Delete"
+                color="#ff0000ff"
+              />
+            </View>
           </View>
         </View>
       </Modal>
-      
+
       <TouchableOpacity
         style={styles.titleTextBox}
         onPress={() => router.back()}
@@ -120,9 +143,12 @@ const RecipeDetail = () => {
                   <AntDesign name="hearto" size={20} color="black" />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => {
-                setLoadingModalVisible(true)
-              }} disabled={isDeleting}>
+              <TouchableOpacity
+                onPress={() => {
+                  setLoadingModalVisible(true);
+                }}
+                disabled={isDeleting}
+              >
                 <FontAwesome name="trash" size={24} color="black" />
               </TouchableOpacity>
             </View>
@@ -210,8 +236,18 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 15,
     borderRadius: 20,
-    padding: 35,
+    padding: 20,
     alignItems: "center",
+    backgroundColor: "white",
+    shadowColor: "#191460",
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  modalButtons: {
+    fontSize: 10,
+    backgroundColor: "white",
+    padding: 10,
   },
 });
 
