@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Button,
   Image,
   Modal,
   ScrollView,
@@ -21,6 +22,7 @@ const RecipeDetail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFavourite, setIsFavourite] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [loadingModalVisible, setLoadingModalVisible] = useState(false);
 
   const router = useRouter();
 
@@ -50,6 +52,7 @@ const RecipeDetail = () => {
   }
 
   function handleDelete() {
+    setLoadingModalVisible(false)
     setIsDeleting(true);
     deleteRecipe(recipeId)
       .then(() => {
@@ -80,6 +83,20 @@ const RecipeDetail = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: "#191460" }}>
+      <Modal
+        transparent={true}
+        visible={loadingModalVisible}
+        animationType="fade"
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={{ marginTop: 15 }}>Delete?</Text>
+            <Button onPress={()=>{handleDelete()}} title='Yes'/>
+            <Button onPress={()=>{setLoadingModalVisible(false)}} title='No'/>
+          </View>
+        </View>
+      </Modal>
+      
       <TouchableOpacity
         style={styles.titleTextBox}
         onPress={() => router.back()}
@@ -103,7 +120,9 @@ const RecipeDetail = () => {
                   <AntDesign name="hearto" size={20} color="black" />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleDelete} disabled={isDeleting}>
+              <TouchableOpacity onPress={() => {
+                setLoadingModalVisible(true)
+              }} disabled={isDeleting}>
                 <FontAwesome name="trash" size={24} color="black" />
               </TouchableOpacity>
             </View>
