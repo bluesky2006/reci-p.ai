@@ -1,3 +1,4 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useCallback, useContext, useState } from "react";
 import {
@@ -10,33 +11,31 @@ import {
   View,
 } from "react-native";
 import { fetchRecipes } from "../api/api";
-import RecipeCard from "./RecipeCard";
 import { UserContext } from "../contexts/UserContext";
-import { useFocusEffect } from "@react-navigation/native";
+import RecipeCard from "./RecipeCard";
 
 function RecipeList() {
   const [recipes, setRecipes] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [filterFavourites, setFilterFavourites] = useState(false);
   const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
 
   useFocusEffect(
-    useCallback(()=>{
+    useCallback(() => {
       setIsLoading(true);
-    fetchRecipes(loggedInUserId)
-      .then((result) => {
-        console.log("fetching")
-        setRecipes(result.recipes);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-      return () => {}
+      fetchRecipes(loggedInUserId)
+        .then((result) => {
+          console.log("fetching");
+          setRecipes(result.recipes);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      return () => {};
     }, [])
-  )
-
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -72,25 +71,49 @@ function RecipeList() {
           </Modal>
         </View>
       )}
-      {recipes.toReversed().map((recipe) => (
-        <Pressable
-          key={recipe._id}
-          onPress={() =>
-            router.navigate({
-              pathname: "/recipe_detail",
-              params: { recipeId: recipe._id },
-            })
-          }
-        >
-          <RecipeCard
-            title={recipe.title}
-            favourite={recipe.favourite}
-            _id={recipe._id}
-            image={recipe.image}
-            summary={recipe.summary}
-          />
-        </Pressable>
-      ))}
+      {filterFavourites
+        ? recipes.toReversed().map((recipe) =>
+            recipe.favourite ? (
+              <Pressable
+                key={recipe._id}
+                onPress={() =>
+                  router.navigate({
+                    pathname: "/recipe_detail",
+                    params: { recipeId: recipe._id },
+                  })
+                }
+              >
+                <RecipeCard
+                  title={recipe.title}
+                  favourite={recipe.favourite}
+                  _id={recipe._id}
+                  image={recipe.image}
+                  summary={recipe.summary}
+                />
+              </Pressable>
+            ) : (
+              ""
+            )
+          )
+        : recipes.toReversed().map((recipe) => (
+            <Pressable
+              key={recipe._id}
+              onPress={() =>
+                router.navigate({
+                  pathname: "/recipe_detail",
+                  params: { recipeId: recipe._id },
+                })
+              }
+            >
+              <RecipeCard
+                title={recipe.title}
+                favourite={recipe.favourite}
+                _id={recipe._id}
+                image={recipe.image}
+                summary={recipe.summary}
+              />
+            </Pressable>
+          ))}
     </ScrollView>
   );
 }
