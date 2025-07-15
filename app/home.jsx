@@ -1,16 +1,15 @@
-import { useFonts, Jura_700Bold } from "@expo-google-fonts/jura";
+import { Jura_700Bold, useFonts } from "@expo-google-fonts/jura";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRouter } from "expo-router";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import RecipeList from "../components/RecipeList";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import RecipeList from "../components/RecipeList";
 
 function HomePage() {
+  const currentUser = GoogleSignin.getCurrentUser();
+  console.log(currentUser);
+
   let [fontsLoaded] = useFonts({
     Jura_700Bold,
   });
@@ -24,8 +23,20 @@ function HomePage() {
         <View style={styles.titleTextBox}>
           <Text style={styles.titleText}>reci-p.ai</Text>
         </View>
-        <TouchableOpacity style={styles.avatar}>
-          <AntDesign name="user" size={28} color="white" />
+        <TouchableOpacity
+          style={styles.avatar}
+          onPress={() => router.navigate("/profile")}
+        >
+          <Image
+            source={{ uri: currentUser.user.photo }}
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 50,
+              borderColor: "white",
+              borderWidth: 2,
+            }}
+          />
         </TouchableOpacity>
         <RecipeList />
         <View style={styles.buttonContainer}>
@@ -57,12 +68,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 5,
+    height: 120,
   },
   button: { bottom: 20 },
   titleText: {
     fontSize: 32,
-    // fontWeight: "bold",
     textAlign: "center",
     color: "white",
     fontFamily: "Jura_700Bold",
@@ -70,8 +80,9 @@ const styles = StyleSheet.create({
   titleTextBox: {
     borderBottomColor: "#191460",
     borderBottomWidth: 0.5,
-    padding: 20,
+    padding: 30,
     backgroundColor: "#191460",
+    height: 100,
   },
   avatar: {
     position: "absolute",

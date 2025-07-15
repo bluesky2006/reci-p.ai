@@ -10,16 +10,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { deleteRecipe, favouriteRecipe, fetchRecipe } from "../api/api";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { deleteRecipe, favouriteRecipe, fetchRecipe } from "../api/api";
 
 const RecipeDetail = () => {
-  
   const { recipeId } = useLocalSearchParams();
   const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFavourite, setIsFavourite] = useState(null);
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const RecipeDetail = () => {
   }
 
   function handleDelete() {
-    setIsDeleting(true)
+    setIsDeleting(true);
     deleteRecipe(recipeId)
       .then(() => {
         router.back();
@@ -56,9 +55,10 @@ const RecipeDetail = () => {
       .catch((err) => {
         console.log(err);
         return <Text>Failed to delete</Text>;
-      }).finally(()=>{    
-        setIsDeleting(false)
       })
+      .finally(() => {
+        setIsDeleting(false);
+      });
   }
 
   if (isLoading) {
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#191460",
     borderBottomWidth: 0.5,
     padding: 20,
+    justifyContent: "center",
     backgroundColor: "#191460",
   },
   titleContainer: {
