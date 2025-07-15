@@ -3,7 +3,9 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,6 +21,7 @@ const RecipeDetail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFavourite, setIsFavourite] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -64,7 +67,13 @@ const RecipeDetail = () => {
   if (isLoading) {
     return (
       <View>
-        <Text>Loading...</Text>
+        <Modal transparent={true} visible={isLoading} animationType="fade">
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <ActivityIndicator size="large" />
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -123,7 +132,7 @@ const RecipeDetail = () => {
             </Text>
           );
         })}
-        <View style={{ height: 40 }}></View>
+        <View style={{ height: 100 }}></View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -131,12 +140,12 @@ const RecipeDetail = () => {
 
 const styles = StyleSheet.create({
   pageContainer: {
+    height: "100%",
     borderColor: "#191460",
     borderWidth: 0.5,
     borderRadius: 15,
     padding: 15,
     backgroundColor: "white",
-    marginBottom: 30,
   },
   titleTextBox: {
     borderBottomColor: "#191460",
@@ -174,6 +183,17 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   bodyText: { marginVertical: 5, lineHeight: 18 },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 15,
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+  },
 });
 
 export default RecipeDetail;
