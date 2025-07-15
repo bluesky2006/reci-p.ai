@@ -5,17 +5,19 @@ import {
   isSuccessResponse,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { router } from "expo-router";
 import { useContext, useState } from "react";
 import { Button, View } from "react-native";
 import { fetchUserByEmail, postUser } from "../api/api";
-import {UserContext} from '../contexts/UserContext'
-import { router } from "expo-router";
+import { UserContext } from "../contexts/UserContext";
 
 export default function Main() {
   const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
   const [user, setUser] = useState(null);
 
-  GoogleSignin.configure();
+  GoogleSignin.configure({
+    iosClientId: process.env.EXPO_PUBLIC_IOS,
+  });
 
   const signIn = async () => {
     try {
@@ -24,21 +26,27 @@ export default function Main() {
       if (isSuccessResponse(response)) {
         setUser(response.data);
         console.log(user.user);
-        fetchUserByEmail(user.user.email).then((res)=>{
-          setLoggedInUserId(res._id)
-        }).catch((err)=> {
-          postUser(user.user.email, user.user.name).then((res)=>{
-            setLoggedInUserId(res._id)
-          }).catch((err)=>{
-            console.log(err)
+        fetchUserByEmail(user.user.email)
+          .then((res) => {
+            setLoggedInUserId(res._id);
           })
-        }).finally(()=>{
-          router.navigate("/home");
-        })
+          .catch((err) => {
+            postUser(user.user.email, user.user.name)
+              .then((res) => {
+                setLoggedInUserId(res._id);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .finally(() => {
+            router.navigate("/home");
+          });
       } else {
         // sign in was cancelled by user
       }
     } catch (error) {
+      console.log(error);
       if (isErrorWithCode(error)) {
         switch (error.code) {
           case statusCodes.IN_PROGRESS:
