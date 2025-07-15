@@ -7,9 +7,9 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen
           name="index"
-          // options={{
-          //   headerShown: false,
-          // }}
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="home"
@@ -31,12 +31,6 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="camera_screen"
-          // options={{
-          //   headerShown: false,
-          // }}
-        />
-        <Stack.Screen
-          name="image_picker"
           options={{
             headerShown: false,
           }}

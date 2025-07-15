@@ -31,7 +31,6 @@ export default function Camera() {
     let photoResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
-      aspect: [1, 1],
       quality: 1,
       base64: true,
     });
@@ -258,7 +257,6 @@ const styles = StyleSheet.create({
   renderedImage: {
     width: "100%",
     height: "100%",
-    objectFit: "cover",
     borderRadius: 15,
   },
 });

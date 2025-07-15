@@ -1,6 +1,6 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-// import * as FileSystem from "expo-file-system";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useContext, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -9,10 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { postRecipe } from "../api/api";
-import { useContext, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { postRecipe } from "../api/api";
+import { UserContext } from "../contexts/UserContext";
 
 function ResponsePreview() {
   const { result, photo } = useLocalSearchParams();
@@ -20,61 +19,78 @@ function ResponsePreview() {
   const parsedResponse = JSON.parse(result);
   const { title, ingredients, steps, summary } = parsedResponse[0];
   const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
-  const [isDisabled, setIsDisabled] = useState(false)
-  
+  const [isDisabled, setIsDisabled] = useState(false);
 
   function handleSaveRecipe() {
-    setIsDisabled(true)
-    return postRecipe(
-      loggedInUserId,
-      title,
-      ingredients,
-      steps,
-      photo,
-      summary
-    )
+    setIsDisabled(true);
+    return postRecipe(loggedInUserId, title, ingredients, steps, photo, summary)
       .then(() => {
-        router.dismissTo('/home');
+        router.dismissTo("/home");
       })
       .catch((error) => {
         console.log(error, "<<postRecipe");
-      }).finally(()=>{
-        setIsDisabled(false)
       })
+      .finally(() => {
+        setIsDisabled(false);
+      });
   }
 
   return (
     <SafeAreaView style={styles.responseContainer}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={{ height: "100%", width: "100%" }}
-          source={{ uri: `data:image/jpeg;base64,${photo}` }}
-        />
+      <View
+        style={{ marginVertical: 15, height: 50, justifyContent: "center" }}
+      >
+        <Text
+          style={{
+            fontSize: 22,
+            fontWeight: "bold",
+            textAlign: "center",
+            color: "white",
+          }}
+        >
+          Recipe preview
+        </Text>
       </View>
       <ScrollView style={styles.sectionListContainer}>
-        <Text style={styles.listHeader}>{title}</Text>
+        <View style={{ flex: 1, flexDirection: "row", gap: 15 }}>
+          <View style={styles.imageContainer}>
+            <Image
+              style={{ height: 100, width: 100 }}
+              source={{ uri: `data:image/jpeg;base64,${photo}` }}
+            />
+          </View>
+          <Text style={styles.listHeader}>{title}</Text>
+        </View>
+        <Text style={styles.heading}>Ingredients</Text>
         <View style={styles.ingredientsContainer}>
           {ingredients.map((ingredient, index) => (
-            <Text key={index} style={styles.ingredients}>
+            <Text key={index} style={styles.bodyText}>
               • {ingredient}
             </Text>
           ))}
         </View>
-        <View style={styles.stepsContainer}>
+        <View>
+          <Text style={styles.heading}>Steps</Text>
           {steps.map((step, index) => (
-            <Text key={index} style={styles.steps}>
+            <Text key={index} style={styles.bodyText}>
               {index + 1}. {step}
             </Text>
           ))}
+          <View style={{ height: 80 }}></View>
         </View>
       </ScrollView>
-      <View style={styles.previewButtonContainer}>
-        <TouchableOpacity onPress={() => router.dismiss(2)} disabled={isDisabled}>
-          <FontAwesome name="close" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleSaveRecipe} disabled={isDisabled}>
-          <FontAwesome name="check" size={30} color="black" />
-        </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <View style={styles.buttons}>
+          <TouchableOpacity
+            onPress={() => router.dismiss(2)}
+            disabled={isDisabled}
+          >
+            <AntDesign name="close" size={40} color="#191460" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleSaveRecipe} disabled={isDisabled}>
+            <AntDesign name="check" size={40} color="#191460" />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -85,11 +101,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     padding: 15,
-    backgroundColor: "white",
+    backgroundColor: "#191460",
   },
   imageContainer: {
-    width: "100%",
-    height: "45%",
     padding: 10,
     borderStyle: "solid",
     borderColor: "black",
@@ -98,6 +112,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     marginBottom: 10,
+    backgroundColor: "white",
   },
   sectionListContainer: {
     height: "40%",
@@ -113,9 +128,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   listHeader: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: "bold",
     marginVertical: 10,
+    flexShrink: 1,
   },
   listHeaderContainer: {
     backgroundColor: "#ffffff",
@@ -130,21 +146,37 @@ const styles = StyleSheet.create({
   },
   ingredientsContainer: {
     backgroundColor: "#ffffff",
-    marginVertical: 10,
     borderRadius: 5,
   },
   steps: { fontSize: 14, marginVertical: 5 },
-  stepsContainer: {},
-  previewButtonContainer: {
-    height: "10%",
-    marginTop: 10,
-    backgroundColor: "#ffffff",
-    width: "100%",
+  buttonContainer: {
+    flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
-    gap: 75,
-    padding: 20,
+    justifyContent: "space-evenly",
+    backgroundColor: "white",
+    borderColor: "#191460",
+    borderWidth: 0.5,
+    borderRadius: 15,
+    alignItems: "center",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 120,
   },
+  buttons: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    bottom: 10,
+  },
+  heading: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 10,
+    marginTop: 15,
+  },
+  bodyText: { marginVertical: 5, lineHeight: 18 },
 });
 
 export default ResponsePreview;
