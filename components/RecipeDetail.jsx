@@ -28,10 +28,9 @@ const RecipeDetail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFavourite, setIsFavourite] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [loadingModalVisible, setLoadingModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [discardModalVisible, setDiscardModalVisible] = useState(false)
   const [title, setTitle] = useState("");
-  const [ingredients, setIngredients] = useState("");
-  const [steps, setSteps] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [titleText, onChangeTitleText] = useState("placeholder");
   const router = useRouter();
@@ -42,8 +41,6 @@ const RecipeDetail = () => {
       .then((result) => {
         setRecipe(result);
         setTitle(result.title);
-        setIngredients(result.ingredients);
-        setSteps(result.steps);
         setIsFavourite(result.favourite);
       })
       .catch((err) => {
@@ -65,7 +62,7 @@ const RecipeDetail = () => {
   }
 
   function handleDelete() {
-    setLoadingModalVisible(false);
+    setDeleteModalVisible(false);
     setIsDeleting(true);
     deleteRecipe(recipeId)
       .then(() => {
@@ -86,14 +83,21 @@ const RecipeDetail = () => {
 
   function handleSubmit() {
     editRecipeTitle(recipeId, titleText)
-      .then(() => {})
+      .then((res) => {console.log(res)})
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         setIsEditing(false); //consider setTitle within this function, using the state to draw our title in return + having it as a re-fetch dependency or similar
+        setTitle(titleText)
       });
   }
+
+  function handleCancelEdit() {
+    setIsEditing(false)
+    onChangeTitleText(recipe.title)
+  }
+
   if (isLoading) {
     return (
       <View>
@@ -108,11 +112,13 @@ const RecipeDetail = () => {
     );
   }
 
+  
+
   return (
     <SafeAreaView style={{ backgroundColor: "#191460" }}>
       <Modal
         transparent={true}
-        visible={loadingModalVisible}
+        visible={deleteModalVisible}
         animationType="fade"
       >
         <View style={styles.centeredView}>
@@ -129,7 +135,7 @@ const RecipeDetail = () => {
               <Button
                 style={styles.modalButtons}
                 onPress={() => {
-                  setLoadingModalVisible(false);
+                  setDeleteModalVisible(false);
                 }}
                 title="Cancel"
                 color="#00000082"
@@ -147,9 +153,45 @@ const RecipeDetail = () => {
         </View>
       </Modal>
 
+      <Modal
+        transparent={true}
+        visible={discardModalVisible}
+        animationType="fade"
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={{ marginVertical: 15, fontSize: 18 }}>
+              Discard changes?
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 50,
+              }}
+            >
+              <Button
+                style={styles.modalButtons}
+                onPress={() => {
+                  setDiscardModalVisible(false);
+                }}
+                title="Cancel"
+                color="#00000082"
+              />
+              <Button
+                style={styles.modalButtons}
+                onPress={() => { router.back()
+                }}
+                title="Discard"
+                color="#ff0000ff"
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <TouchableOpacity
         style={styles.titleTextBox}
-        onPress={() => router.back()}
+        onPress={() => isEditing ? setDiscardModalVisible(true) : router.back()}
       >
         <AntDesign name="arrowleft" size={24} color="white" />
       </TouchableOpacity>
@@ -163,7 +205,7 @@ const RecipeDetail = () => {
             {isEditing ? (
               <TextInput onChangeText={onChangeTitleText} value={titleText} />
             ) : (
-              <Text style={styles.recipeTitle}>{recipe.title}</Text>
+              <Text style={styles.recipeTitle}>{title}</Text>
             )}
             <View style={styles.faveDelete}>
               <View></View>
@@ -178,13 +220,18 @@ const RecipeDetail = () => {
                 <FontAwesome name="pencil" size={24} color="black" />
               </TouchableOpacity>
               {isEditing && (
-                <TouchableOpacity onPress={handleSubmit}>
-                  <FontAwesome name="check" size={24} color="black" />
-                </TouchableOpacity>
+                <>
+                  <TouchableOpacity onPress={handleSubmit}>
+                    <FontAwesome name="check" size={24} color="black" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleCancelEdit}>
+                    <FontAwesome name="close" size={24} color="black" />
+                  </TouchableOpacity>
+                </>
               )}
               <TouchableOpacity
                 onPress={() => {
-                  setLoadingModalVisible(true);
+                  setDeleteModalVisible(true);
                 }}
                 disabled={isDeleting}
               >
