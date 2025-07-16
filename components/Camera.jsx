@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 8,
+    elevation: 8,
   },
   checkButton: {
     bottom: 40,
@@ -235,6 +236,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 8,
+    elevation: 8,
   },
   shutterBtnInner: {
     width: 64,
@@ -254,6 +256,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 8,
+    elevation: 8,
   },
   centeredView: {
     flex: 1,
@@ -273,7 +276,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 8,
   },
   buttons: { bottom: 10 },
   renderedImage: {

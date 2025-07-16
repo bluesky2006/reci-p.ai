@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RecipeList from "../components/RecipeList";
-import { FontAwesome } from "@expo/vector-icons";
 
 function HomePage() {
   const [user, setUser] = useState(null);
@@ -76,6 +75,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 8,
+    elevation: 8,
   },
   button: { bottom: 20 },
   titleText: {
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 8,
+    elevation: 8,
   },
 });
 

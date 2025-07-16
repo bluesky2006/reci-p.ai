@@ -88,7 +88,7 @@ function ResponsePreview() {
             {index + 1}. {step}
           </Text>
         ))}
-        <View style={{ height: 100 }}></View>
+        <View style={{ height: 120 }}></View>
       </ScrollView>
       <View style={styles.buttonContainer}>
         <View style={styles.buttons}>
@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 8,
+    elevation: 8,
   },
   buttons: {
     flex: 1,
