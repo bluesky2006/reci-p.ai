@@ -99,7 +99,7 @@ const adjustRecipeFavourite = async (db, recipeIdString, favourite) => {
   return result;
 };
 
-const adjustRecipe = async (db, recipeIdString, title, ingredients, steps) => {
+const adjustRecipeTitle = async (db, recipeIdString, title) => {
   if (!ObjectId.isValid(recipeIdString)) {
     throw { status: 404, message: "Recipe not found" };
   }
@@ -108,10 +108,7 @@ const adjustRecipe = async (db, recipeIdString, title, ingredients, steps) => {
 
   const result = await db
     .collection("recipes")
-    .updateOne(
-      { _id: recipeObjectId },
-      { $set: { title, ingredients, steps } }
-    );
+    .updateOne({ _id: recipeObjectId }, { $set: { title } });
 
   return result;
 };
@@ -138,5 +135,5 @@ module.exports = {
   removeRecipe,
   adjustRecipeFavourite,
   updateRecipeOrder,
-  adjustRecipe,
+  adjustRecipeTitle,
 };

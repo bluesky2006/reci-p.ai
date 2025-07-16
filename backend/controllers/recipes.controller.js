@@ -4,7 +4,7 @@ const {
   removeRecipe,
   adjustRecipeFavourite,
   updateRecipeOrder,
-  adjustRecipe,
+  adjustRecipeTitle,
 } = require("../models/recipes.model.js");
 
 const getRecipe = (req, res, next) => {
@@ -57,12 +57,12 @@ const patchRecipeFavourite = (req, res, next) => {
     });
 };
 
-const patchRecipe = (req, res, next) => {
+const patchRecipeTitle = (req, res, next) => {
   const { _id } = req.params;
-  const { title, steps, ingredients } = req.body;
+  const { title } = req.body;
   const db = req.app.locals.db;
 
-  return adjustRecipe(db, _id, title, steps, ingredients)
+  return adjustRecipeTitle(db, _id, title)
     .then((updatedRecipe) => {
       res.status(200).send({ updatedRecipe });
     })
@@ -87,5 +87,5 @@ module.exports = {
   postRecipe,
   deleteRecipe,
   patchRecipeOrder,
-  patchRecipe,
+  patchRecipeTitle,
 };
