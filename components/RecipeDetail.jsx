@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Button,
   Image,
   Modal,
   ScrollView,
@@ -73,7 +72,7 @@ const RecipeDetail = () => {
         <Modal transparent={true} visible={isLoading} animationType="fade">
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <ActivityIndicator size="large" />
+              <ActivityIndicator size="large" color="#2778fe" />
             </View>
           </View>
         </Modal>
@@ -82,7 +81,7 @@ const RecipeDetail = () => {
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#191460" }}>
+    <SafeAreaView style={{ backgroundColor: "#efefefff" }}>
       <Modal
         transparent={true}
         visible={loadingModalVisible}
@@ -90,7 +89,7 @@ const RecipeDetail = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{ marginVertical: 15, fontSize: 18 }}>
+            <Text style={{ fontSize: 16, marginBottom: 15 }}>
               Are you sure you want to delete?
             </Text>
             <View
@@ -99,22 +98,38 @@ const RecipeDetail = () => {
                 gap: 50,
               }}
             >
-              <Button
-                style={styles.modalButtons}
+              <TouchableOpacity
                 onPress={() => {
                   setLoadingModalVisible(false);
                 }}
-                title="Cancel"
-                color="#00000082"
-              />
-              <Button
-                style={styles.modalButtons}
+              >
+                <Text
+                  style={{
+                    color: "#00000082",
+                    textAlign: "center",
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => {
                   handleDelete();
                 }}
-                title="Delete"
-                color="#ff0000ff"
-              />
+              >
+                <Text
+                  style={{
+                    color: "#2778fe",
+                    textAlign: "center",
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  Delete
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -124,7 +139,7 @@ const RecipeDetail = () => {
         style={styles.titleTextBox}
         onPress={() => router.back()}
       >
-        <AntDesign name="arrowleft" size={24} color="white" />
+        <AntDesign name="arrowleft" size={24} color="#2778fe" />
       </TouchableOpacity>
       <ScrollView style={styles.pageContainer}>
         <View style={styles.titleContainer}>
@@ -186,18 +201,18 @@ const RecipeDetail = () => {
 const styles = StyleSheet.create({
   pageContainer: {
     height: "100%",
-    borderColor: "#191460",
+    borderColor: "#efefefff",
     borderWidth: 0.5,
     borderRadius: 15,
     padding: 15,
     backgroundColor: "white",
   },
   titleTextBox: {
-    borderBottomColor: "#191460",
+    borderBottomColor: "#efefefff",
     borderBottomWidth: 0.5,
     padding: 20,
     justifyContent: "center",
-    backgroundColor: "#191460",
+    backgroundColor: "#efefefff",
   },
   titleContainer: {
     flexDirection: "row",
@@ -214,7 +229,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
   },
-  textBoxCard: { flexShrink: 1 },
+  textBoxCard: { flexShrink: 1, width: "100%" },
   faveDelete: {
     flex: 1,
     flexDirection: "row",
@@ -239,13 +254,12 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     backgroundColor: "white",
-    shadowColor: "#191460",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    shadowColor: "#5d5d5dff",
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
   },
   modalButtons: {
-    fontSize: 10,
     backgroundColor: "white",
     padding: 10,
   },

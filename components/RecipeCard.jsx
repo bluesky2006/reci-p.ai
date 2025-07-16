@@ -47,7 +47,7 @@ function RecipeCard({ _id, title, favourite, image, summary }) {
 const styles = StyleSheet.create({
   recipeCardContainer: {
     padding: 10,
-    borderColor: "#191460",
+    borderColor: "#efefefff",
     borderWidth: 0.5,
     borderRadius: 5,
     flexDirection: "row",
@@ -57,10 +57,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   shadowProp: {
-    shadowColor: "#191460",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    shadowColor: "#5d5d5dff",
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
   },
   recipeThumbnail: {
     width: 100,

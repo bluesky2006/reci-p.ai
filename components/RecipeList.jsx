@@ -63,15 +63,15 @@ function RecipeList() {
   return (
     <>
       <View style={styles.favContainer}>
-        <View style={styles.favText}>
+        <View style={styles.favTextBox}>
           <Text style={{ fontSize: 14 }}>Toggle favourites</Text>
           {!filterFavourites ? (
             <TouchableOpacity onPress={() => handleFilter()}>
-              <FontAwesome name="toggle-off" size={24} color="#191460" />
+              <FontAwesome name="toggle-off" size={24} color="black" />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={() => handleFilter()}>
-              <FontAwesome name="toggle-on" size={24} color="#191460" />
+              <FontAwesome name="toggle-on" size={24} color="#2778fe" />
             </TouchableOpacity>
           )}
         </View>
@@ -87,7 +87,7 @@ function RecipeList() {
             <Modal transparent={true} visible={isLoading} animationType="fade">
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <ActivityIndicator size="large" />
+                  <ActivityIndicator size="large" color="#2778fe" />
                 </View>
               </View>
             </Modal>
@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
-  favText: {
-    borderBottomColor: "#191460",
+  favTextBox: {
+    borderBottomColor: "#efefefff",
     borderBottomWidth: 0.5,
     width: "100%",
     flexDirection: "row",

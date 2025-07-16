@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 50,
     textAlign: "center",
-    color: "#191460",
+    color: "#2778fe",
     fontFamily: "Jura_700Bold",
   },
 });

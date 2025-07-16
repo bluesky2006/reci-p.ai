@@ -2,17 +2,17 @@ import { Jura_700Bold, useFonts } from "@expo-google-fonts/jura";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RecipeList from "../components/RecipeList";
-import { useEffect, useState } from "react";
 
 function HomePage() {
-  const [user, setUser] = useState(null)
-  
-  useEffect(()=>{
-    setUser(GoogleSignin.getCurrentUser())
-  }, [])
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    setUser(GoogleSignin.getCurrentUser());
+  }, []);
 
   let [fontsLoaded] = useFonts({
     Jura_700Bold,
@@ -24,31 +24,22 @@ function HomePage() {
   } else {
     return (
       <SafeAreaView style={styles.homePageContainer}>
-        <View style={styles.titleTextBox}>
-          <Text style={styles.titleText}>reci-p.ai</Text>
+        <View style={styles.titleContainer}>
+          <View>
+            <Text style={styles.titleText}>reci-p.ai</Text>
+          </View>
+          <TouchableOpacity onPress={() => router.navigate("/profile")}>
+            <Image source={{ uri: user.user.photo }} style={styles.image} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.avatar}
-          onPress={() => router.navigate("/profile")}
-        >
-          <Image
-            source={{ uri: user.user.photo }}
-            style={{
-              height: 50,
-              width: 50,
-              borderRadius: 50,
-              borderColor: "white",
-              borderWidth: 2,
-            }}
-          />
-        </TouchableOpacity>
         <RecipeList />
         <View style={styles.buttonContainer}>
+          <View style={[styles.shutterBtnBg]}></View>
           <TouchableOpacity
             style={styles.button}
             onPress={() => router.navigate("/camera_screen")}
           >
-            <AntDesign name="pluscircle" size={75} color="#191460" />
+            <AntDesign name="pluscircle" size={75} color="#2778fe" />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -60,11 +51,10 @@ const styles = StyleSheet.create({
   homePageContainer: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "#191460",
   },
   buttonContainer: {
-    backgroundColor: "white",
-    borderColor: "#191460",
+    backgroundColor: "#efefefff",
+    borderColor: "#efefefff",
     borderWidth: 0.5,
     borderRadius: 15,
     alignItems: "center",
@@ -73,25 +63,45 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 120,
+    shadowColor: "#5d5d5dff",
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
   },
   button: { bottom: 20 },
   titleText: {
     fontSize: 32,
     textAlign: "center",
-    color: "white",
+    color: "#2778fe",
     fontFamily: "Jura_700Bold",
   },
-  titleTextBox: {
-    borderBottomColor: "#191460",
-    borderBottomWidth: 0.5,
-    padding: 30,
-    backgroundColor: "#191460",
+  titleContainer: {
     height: 100,
+    padding: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  avatar: {
+  image: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    borderColor: "#2778fe",
+    borderWidth: 2,
+  },
+  shutterBtnBg: {
     position: "absolute",
-    right: 15,
-    top: 90,
+    backgroundColor: "#efefefff",
+    width: 75,
+    height: 75,
+    borderRadius: 45,
+    alignItems: "center",
+    justifyContent: "center",
+    bottom: 63.7,
+    shadowColor: "#5d5d5dff",
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
   },
 });
 
