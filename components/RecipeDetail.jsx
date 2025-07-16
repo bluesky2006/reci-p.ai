@@ -223,37 +223,39 @@ const RecipeDetail = () => {
             ) : (
               <Text style={styles.recipeTitle}>{title}</Text>
             )}
-            <View style={styles.faveDelete}>
-              <View></View>
-              <TouchableOpacity onPress={handleFavourite}>
-                {isFavourite ? (
-                  <AntDesign name="heart" size={20} color="red" />
-                ) : (
-                  <AntDesign name="hearto" size={20} color="black" />
-                )}
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleEdit} disabled={isDeleting}>
-                <FontAwesome name="pencil" size={24} color="black" />
-              </TouchableOpacity>
-              {isEditing && (
-                <>
-                  <TouchableOpacity onPress={handleSubmit}>
-                    <FontAwesome name="check" size={24} color="black" />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handleCancelEdit}>
-                    <FontAwesome name="close" size={24} color="black" />
-                  </TouchableOpacity>
-                </>
-              )}
-              <TouchableOpacity
-                onPress={() => {
-                  setDeleteModalVisible(true);
-                }}
-                disabled={isDeleting}
-              >
-                <FontAwesome name="trash" size={24} color="black" />
-              </TouchableOpacity>
-            </View>
+            {isEditing ? (
+              <View style={styles.faveDelete}>
+                <View></View>
+                <TouchableOpacity onPress={handleCancelEdit}>
+                  <FontAwesome name="close" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleSubmit}>
+                  <FontAwesome name="check" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.faveDelete}>
+                <View></View>
+                <TouchableOpacity onPress={handleFavourite}>
+                  {isFavourite ? (
+                    <AntDesign name="heart" size={20} color="red" />
+                  ) : (
+                    <AntDesign name="hearto" size={20} color="black" />
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleEdit} disabled={isDeleting}>
+                  <FontAwesome name="pencil" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setDeleteModalVisible(true);
+                  }}
+                  disabled={isDeleting}
+                >
+                  <FontAwesome name="trash" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
         <View
