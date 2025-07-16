@@ -1,5 +1,4 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
@@ -15,7 +14,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import imageProcessing from "../utils/imageProcessing";
 
 export default function Camera() {
@@ -58,10 +56,12 @@ export default function Camera() {
 
   function takePicture() {
     if (ref.current) {
-      ref.current.takePictureAsync({ base64: true }).then((photo) => {
-        setUri(photo.uri);
-        setImage64(photo.base64);
-      });
+      ref.current
+        .takePictureAsync({ base64: true, shutterSound: true })
+        .then((photo) => {
+          setUri(photo.uri);
+          setImage64(photo.base64);
+        });
     }
   }
 
@@ -75,38 +75,28 @@ export default function Camera() {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <ActivityIndicator size="large" />
-              <Text style={{ marginTop: 15 }}>Processing...</Text>
+              <ActivityIndicator size="large" color="#2778fe" />
+              <Text style={{ marginTop: 15, fontSize: 16 }}>Processing...</Text>
             </View>
           </View>
         </Modal>
-        <SafeAreaView
+        <View
           style={{
-            backgroundColor: "white",
-            padding: 15,
             width: "100%",
           }}
         >
-          <View
-            style={{
-              backgroundColor: "white",
-              borderStyle: "dashed",
-              borderColor: "black",
-              borderWidth: 1,
-              bottom: 60,
-              borderRadius: 15,
-            }}
-          >
+          <View>
             <Image source={{ uri }} style={styles.renderedImage} />
           </View>
-        </SafeAreaView>
+        </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => router.back()}
             style={styles.buttons}
           >
-            <AntDesign name="close" size={40} color="#191460" />
+            <AntDesign name="close" size={40} color="#2778fe" />
           </TouchableOpacity>
+          <View style={styles.shutterBtnRenderBg}></View>
           <TouchableOpacity
             onPress={async () => {
               setLoadingModalVisible(true);
@@ -124,7 +114,7 @@ export default function Camera() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setUri(null)} style={styles.buttons}>
-            <AntDesign name="reload1" size={40} color="#191460" />
+            <AntDesign name="reload1" size={40} color="#2778fe" />
           </TouchableOpacity>
         </View>
       </>
@@ -145,8 +135,9 @@ export default function Camera() {
             onPress={() => router.back()}
             style={styles.buttons}
           >
-            <AntDesign name="arrowleft" size={40} color="#191460" />
+            <AntDesign name="close" size={40} color="#2778fe" />
           </TouchableOpacity>
+          <View style={styles.shutterBtnBg}></View>
           <Pressable onPress={takePicture}>
             {({ pressed }) => (
               <View
@@ -161,7 +152,7 @@ export default function Camera() {
                   style={[
                     styles.shutterBtnInner,
                     {
-                      backgroundColor: "#191460",
+                      backgroundColor: "#2778fe",
                     },
                   ]}
                 />
@@ -169,7 +160,7 @@ export default function Camera() {
             )}
           </Pressable>
           <TouchableOpacity onPress={pickImage} style={styles.buttons}>
-            <FontAwesome name="upload" size={40} color="#191460" />
+            <AntDesign name="upload" size={36} color="#2778fe" />
           </TouchableOpacity>
         </View>
       </>
@@ -198,9 +189,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-evenly",
-    backgroundColor: "white",
-    borderColor: "#191460",
-    borderWidth: 0.5,
+    backgroundColor: "#efefefff",
     borderRadius: 15,
     alignItems: "center",
     position: "absolute",
@@ -208,30 +197,63 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 120,
+    shadowColor: "#5d5d5dff",
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
   },
   checkButton: {
     bottom: 40,
-    backgroundColor: "#191460",
-    padding: 10,
+    backgroundColor: "#2778fe",
+    height: 76,
+    aspectRatio: 1,
     borderRadius: 50,
-    borderColor: "#191460",
-    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   shutterBtn: {
-    backgroundColor: "white",
+    backgroundColor: "#efefefff",
     borderWidth: 5,
-    borderColor: "#191460",
-    width: 85,
-    height: 85,
+    borderColor: "#2778fe",
+    width: 79,
+    height: 79,
     borderRadius: 45,
     alignItems: "center",
     justifyContent: "center",
     bottom: 40,
   },
+  shutterBtnBg: {
+    position: "absolute",
+    backgroundColor: "#efefefff",
+    width: 75,
+    height: 75,
+    borderRadius: 45,
+    alignItems: "center",
+    justifyContent: "center",
+    bottom: 61,
+    shadowColor: "#5d5d5dff",
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+  },
   shutterBtnInner: {
-    width: 70,
-    height: 70,
+    width: 64,
+    height: 64,
     borderRadius: 50,
+  },
+  shutterBtnRenderBg: {
+    position: "absolute",
+    backgroundColor: "#efefefff",
+    width: 76,
+    height: 76,
+    borderRadius: 45,
+    alignItems: "center",
+    justifyContent: "center",
+    bottom: 62,
+    shadowColor: "#5d5d5dff",
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
   },
   centeredView: {
     flex: 1,
@@ -257,6 +279,5 @@ const styles = StyleSheet.create({
   renderedImage: {
     width: "100%",
     height: "100%",
-    borderRadius: 15,
   },
 });

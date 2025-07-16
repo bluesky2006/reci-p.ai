@@ -2,14 +2,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 import { useRouter } from "expo-router";
-import {
-  Button,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function Profile() {
@@ -26,12 +19,12 @@ function Profile() {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#191460", height: "100%" }}>
+    <SafeAreaView style={{ backgroundColor: "#efefefff", height: "100%" }}>
       <TouchableOpacity
         style={styles.navBackContainer}
         onPress={() => router.back()}
       >
-        <AntDesign name="arrowleft" size={24} color="white" />
+        <AntDesign name="arrowleft" size={24} color="#2778fe" />
       </TouchableOpacity>
       <View style={styles.container}>
         <Text
@@ -47,7 +40,6 @@ function Profile() {
         <View
           style={{
             flex: 1,
-            // flexDirection: "row",
             alignItems: "center",
             gap: 15,
           }}
@@ -59,7 +51,19 @@ function Profile() {
           <Text>Signed in as {currentUser.user.name}</Text>
         </View>
         <View style={styles.button}>
-          <Button onPress={() => signOut()} title="Sign out" />
+          <TouchableOpacity onPress={() => signOut()}>
+            <Text
+              style={{
+                color: "#2778fe",
+                textAlign: "center",
+                fontWeight: 500,
+                fontSize: 16,
+              }}
+            >
+              Sign out
+            </Text>
+          </TouchableOpacity>
+          <View style={{ height: 80 }}></View>
         </View>
       </View>
     </SafeAreaView>
@@ -68,16 +72,17 @@ function Profile() {
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: "#191460",
+    borderColor: "#efefefff",
     borderWidth: 0.5,
     borderRadius: 15,
     padding: 15,
     backgroundColor: "white",
-    flex: 1,
+    flex: 0,
+    height: "100%",
   },
   navBackContainer: {
     padding: 20,
-    backgroundColor: "#191460",
+    backgroundColor: "#efefefff",
     justifyContent: "center",
   },
   button: {
@@ -88,7 +93,7 @@ const styles = StyleSheet.create({
     height: 75,
     width: 75,
     borderRadius: 50,
-    borderColor: "#191460",
+    borderColor: "#2778fe",
     borderWidth: 2,
   },
 });

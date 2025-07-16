@@ -43,19 +43,27 @@ function ResponsePreview() {
         <Text
           style={{
             fontSize: 22,
-            fontWeight: "bold",
+            fontWeight: 600,
             textAlign: "center",
-            color: "white",
+            color: "#2778fe",
           }}
         >
           Recipe preview
         </Text>
       </View>
       <ScrollView style={styles.sectionListContainer}>
-        <View style={{ flex: 1, flexDirection: "row", gap: 15 }}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            gap: 15,
+            borderBottomColor: "#efefefff",
+            borderBottomWidth: 0.5,
+          }}
+        >
           <View style={styles.imageContainer}>
             <Image
-              style={{ height: 100, width: 100 }}
+              style={styles.imageThumbnail}
               source={{ uri: `data:image/jpeg;base64,${photo}` }}
             />
           </View>
@@ -76,7 +84,7 @@ function ResponsePreview() {
               {index + 1}. {step}
             </Text>
           ))}
-          <View style={{ height: 80 }}></View>
+          <View style={{ height: 100 }}></View>
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>
@@ -85,10 +93,10 @@ function ResponsePreview() {
             onPress={() => router.dismiss(2)}
             disabled={isDisabled}
           >
-            <AntDesign name="close" size={40} color="#191460" />
+            <AntDesign name="close" size={40} color="#2778fe" />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleSaveRecipe} disabled={isDisabled}>
-            <AntDesign name="check" size={40} color="#191460" />
+            <AntDesign name="check" size={40} color="#2778fe" />
           </TouchableOpacity>
         </View>
       </View>
@@ -100,32 +108,18 @@ const styles = StyleSheet.create({
   responseContainer: {
     flex: 1,
     flexDirection: "column",
-    padding: 15,
-    backgroundColor: "#191460",
+    backgroundColor: "#efefefff",
   },
   imageContainer: {
-    padding: 10,
-    borderStyle: "solid",
-    borderColor: "black",
-    borderWidth: 0.5,
-    borderRadius: 5,
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginBottom: 10,
+    marginBottom: 15,
     backgroundColor: "white",
   },
+  imageThumbnail: { height: 100, width: 100, borderRadius: 5 },
   sectionListContainer: {
     height: "40%",
     backgroundColor: "#ffffff",
     padding: 15,
-    borderStyle: "solid",
-    borderColor: "black",
-    borderWidth: 0.5,
-    borderRadius: 5,
-    shadowColor: "#171717",
-    shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    borderRadius: 15,
   },
   listHeader: {
     fontSize: 24,
@@ -153,16 +147,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-evenly",
-    backgroundColor: "white",
-    borderColor: "#191460",
-    borderWidth: 0.5,
-    borderRadius: 15,
+    backgroundColor: "#efefefff",
     alignItems: "center",
     position: "absolute",
+    borderRadius: 15,
     bottom: 0,
     left: 0,
     right: 0,
     height: 120,
+    shadowColor: "#5d5d5dff",
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
   },
   buttons: {
     flex: 1,
