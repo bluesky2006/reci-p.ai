@@ -255,7 +255,7 @@ const RecipeDetail = () => {
               <TextInput
                 onChangeText={onChangeTitleText}
                 value={titleText}
-                style={styles.recipeTitle}
+                style={styles.recipeTitleInput}
                 autoFocus={true}
                 maxLength={40}
                 numberOfLines={2}
@@ -364,6 +364,11 @@ const styles = StyleSheet.create({
   recipeTitle: {
     fontSize: 22,
     fontWeight: "bold",
+  },
+  recipeTitleInput: {
+    fontSize: 22,
+    fontWeight: "bold",
+    padding: 0
   },
   textBoxCard: { flexShrink: 1, width: "100%" },
   mainIcons: {

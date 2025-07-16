@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RecipeList from "../components/RecipeList";
+import { FontAwesome } from "@expo/vector-icons";
 
 function HomePage() {
   const [user, setUser] = useState(null);
@@ -33,7 +34,11 @@ function HomePage() {
             <Text style={styles.titleText}>reci-p.ai</Text>
           </View>
           <TouchableOpacity onPress={() => router.navigate("/profile")}>
-            <Image source={{ uri: user.user.photo }} style={styles.image} />
+            {user.user.photo ? (
+              <Image source={{ uri: user.user.photo }} style={styles.image} />
+            ) : (
+              <Image source={require("../assets/avatar-placeholder.png")} style={styles.image} />
+            )}
           </TouchableOpacity>
         </View>
         <RecipeList />
