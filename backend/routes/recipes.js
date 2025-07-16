@@ -5,13 +5,13 @@ const {
   postRecipe,
   deleteRecipe,
   patchRecipeFavourite,
-  patchRecipe,
+  patchRecipeTitle,
 } = require("../controllers/recipes.controller.js");
 
 router.get("/:_id", getRecipe);
 router.post("/", postRecipe);
 router.delete("/:_id", deleteRecipe);
 router.patch("/:_id", patchRecipeFavourite);
-router.patch("/:_id/details", patchRecipe);
+router.patch("/:_id/details", patchRecipeTitle);
 
 module.exports = router;
