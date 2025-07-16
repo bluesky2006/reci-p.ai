@@ -62,6 +62,17 @@ export function favouriteRecipe(recipeId, favourite) {
   });
 }
 
+export function editRecipe(recipeId, title, ingredients, steps) {
+  return fetch(`${baseUrl}/recipes/${recipeId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ title, ingredients, steps }),
+    headers: { "Content-type": "application/json" },
+  }).then((res) => {
+    if (!res.ok) throw new Error("Failed to edit recipe!");
+    return res.json();
+  });
+}
+
 export function postRecipe(userId, title, ingredients, steps, image, summary) {
   return fetch(`${baseUrl}/recipes`, {
     method: "POST",

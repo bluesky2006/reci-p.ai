@@ -2,8 +2,9 @@ const {
   insertRecipe,
   fetchRecipe,
   removeRecipe,
-  adjustRecipe,
+  adjustRecipeFavourite,
   updateRecipeOrder,
+  adjustRecipe,
 } = require("../models/recipes.model.js");
 
 const getRecipe = (req, res, next) => {
@@ -42,12 +43,26 @@ const deleteRecipe = (req, res, next) => {
     });
 };
 
-const patchRecipe = (req, res, next) => {
+const patchRecipeFavourite = (req, res, next) => {
   const { _id } = req.params;
   const { favourite } = req.body;
   const db = req.app.locals.db;
 
-  return adjustRecipe(db, _id, favourite)
+  return adjustRecipeFavourite(db, _id, favourite)
+    .then((updatedRecipe) => {
+      res.status(200).send({ updatedRecipe });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+const patchRecipe = (req, res, next) => {
+  const { _id } = req.params;
+  const { title, steps, ingredients } = req.body;
+  const db = req.app.locals.db;
+
+  return adjustRecipe(db, _id, title, steps, ingredients)
     .then((updatedRecipe) => {
       res.status(200).send({ updatedRecipe });
     })
@@ -67,9 +82,10 @@ const patchRecipeOrder = (req, res, next) => {
 };
 
 module.exports = {
-  patchRecipe,
+  patchRecipeFavourite,
   getRecipe,
   postRecipe,
   deleteRecipe,
   patchRecipeOrder,
+  patchRecipe,
 };

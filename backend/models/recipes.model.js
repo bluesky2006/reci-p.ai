@@ -82,7 +82,7 @@ const removeRecipe = async (db, recipeIdString) => {
   return;
 };
 
-const adjustRecipe = async (db, recipeIdString, favourite) => {
+const adjustRecipeFavourite = async (db, recipeIdString, favourite) => {
   if (!ObjectId.isValid(recipeIdString)) {
     throw { status: 404, message: "Recipe not found" };
   }
@@ -95,6 +95,23 @@ const adjustRecipe = async (db, recipeIdString, favourite) => {
   const result = await db
     .collection("recipes")
     .updateOne({ _id: recipeObjectId }, { $set: { favourite } });
+
+  return result;
+};
+
+const adjustRecipe = async (db, recipeIdString, title, ingredients, steps) => {
+  if (!ObjectId.isValid(recipeIdString)) {
+    throw { status: 404, message: "Recipe not found" };
+  }
+
+  const recipeObjectId = new ObjectId(recipeIdString);
+
+  const result = await db
+    .collection("recipes")
+    .updateOne(
+      { _id: recipeObjectId },
+      { $set: { title, ingredients, steps } }
+    );
 
   return result;
 };
@@ -115,28 +132,11 @@ const updateRecipeOrder = async (db, userIdString, orderedIds) => {
   return db.collection("recipes").bulkWrite(bulkOps);
 };
 
-// {
-//   _id: '686cedd6237d6f414d7d1c16',
-//   title: 'Avocado Toast',
-//   ingredients: [
-//     '1 ripe avocado',
-//     '2 slices of wholegrain bread',
-//     'A pinch of sea salt'
-//   ],
-//   steps: [
-//     'Step 1: Toast the bread slices to your preferred crispness.',
-//     'Step 2: Cut the avocado in half, remove the pit, and scoop the flesh into a bowl.',
-//     'Step 3: Mash the avocado with a fork until smooth but slightly chunky.',
-//     'Step 4: Spread the mashed avocado evenly over the toasted bread.',
-//     'Step 5: Sprinkle a pinch of sea salt on top before serving.'
-//   ],
-//   username: 'butter_bridge',
-//   userId: '686cedd6237d6f414d7d1c09'
-// }
 module.exports = {
   fetchRecipe,
   insertRecipe,
   removeRecipe,
-  adjustRecipe,
+  adjustRecipeFavourite,
   updateRecipeOrder,
+  adjustRecipe,
 };
