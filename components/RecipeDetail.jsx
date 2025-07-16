@@ -110,6 +110,14 @@ const RecipeDetail = () => {
     );
   }
 
+  function handleBack() {
+    if(isEditing && (title !== titleText)){
+      setDiscardModalVisible(true)
+    }else{
+      router.back()
+    }
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: "#efefefff" }}>
       <Modal
@@ -239,7 +247,7 @@ const RecipeDetail = () => {
       <TouchableOpacity
         style={styles.titleTextBox}
         onPress={() =>
-          isEditing ? setDiscardModalVisible(true) : router.back()
+          handleBack()
         }
       >
         <AntDesign name="arrowleft" size={24} color="#2778fe" />
@@ -404,6 +412,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 8,
+    elevation: 8,
   },
   modalButtons: {
     backgroundColor: "white",
