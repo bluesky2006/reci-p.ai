@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Button,
   Image,
   Modal,
   ScrollView,
@@ -28,7 +29,7 @@ const RecipeDetail = () => {
   const [isFavourite, setIsFavourite] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [discardModalVisible, setDiscardModalVisible] = useState(false)
+  const [discardModalVisible, setDiscardModalVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [titleText, onChangeTitleText] = useState("placeholder");
@@ -87,13 +88,13 @@ const RecipeDetail = () => {
       })
       .finally(() => {
         setIsEditing(false);
-        setTitle(titleText)
+        setTitle(titleText);
       });
   }
 
   function handleCancelEdit() {
-    setIsEditing(false)
-    onChangeTitleText(recipe.title)
+    setIsEditing(false);
+    onChangeTitleText(recipe.title);
   }
 
   if (isLoading) {
@@ -109,8 +110,6 @@ const RecipeDetail = () => {
       </View>
     );
   }
-
-  
 
   return (
     <SafeAreaView style={{ backgroundColor: "#efefefff" }}>
@@ -193,7 +192,8 @@ const RecipeDetail = () => {
               />
               <Button
                 style={styles.modalButtons}
-                onPress={() => { router.back()
+                onPress={() => {
+                  router.back();
                 }}
                 title="Discard"
                 color="#ff0000ff"
@@ -205,7 +205,9 @@ const RecipeDetail = () => {
 
       <TouchableOpacity
         style={styles.titleTextBox}
-        onPress={() => isEditing ? setDiscardModalVisible(true) : router.back()}
+        onPress={() =>
+          isEditing ? setDiscardModalVisible(true) : router.back()
+        }
       >
         <AntDesign name="arrowleft" size={24} color="#2778fe" />
       </TouchableOpacity>
