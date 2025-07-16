@@ -38,18 +38,15 @@ function ResponsePreview() {
   return (
     <SafeAreaView style={styles.responseContainer}>
       <View
-        style={{ marginVertical: 15, height: 50, justifyContent: "center" }}
-      >
-        <Text
-          style={{
-            fontSize: 22,
-            fontWeight: 600,
-            textAlign: "center",
-            color: "#2778fe",
-          }}
-        >
-          Recipe preview
-        </Text>
+        style={{
+          height: 15,
+          justifyContent: "center",
+        }}
+      ></View>
+      <View style={styles.recipePreviewContainer}>
+        <View style={styles.recipePreviewTextBox}>
+          <Text style={styles.recipePreviewText}>Recipe preview</Text>
+        </View>
       </View>
       <ScrollView style={styles.sectionListContainer}>
         <View
@@ -57,8 +54,9 @@ function ResponsePreview() {
             flex: 1,
             flexDirection: "row",
             gap: 15,
-            borderBottomColor: "#efefefff",
-            borderBottomWidth: 0.5,
+            borderBottomColor: "#d7d7d7ff",
+            borderBottomWidth: 1,
+            marginBottom: 10,
           }}
         >
           <View style={styles.imageContainer}>
@@ -77,15 +75,20 @@ function ResponsePreview() {
             </Text>
           ))}
         </View>
-        <View>
-          <Text style={styles.heading}>Steps</Text>
-          {steps.map((step, index) => (
-            <Text key={index} style={styles.bodyText}>
-              {index + 1}. {step}
-            </Text>
-          ))}
-          <View style={{ height: 100 }}></View>
-        </View>
+        <View
+          style={{
+            borderBottomColor: "#d7d7d7ff",
+            borderBottomWidth: 1,
+            marginVertical: 13,
+          }}
+        />
+        <Text style={styles.heading}>Steps</Text>
+        {steps.map((step, index) => (
+          <Text key={index} style={styles.bodyText}>
+            {index + 1}. {step}
+          </Text>
+        ))}
+        <View style={{ height: 100 }}></View>
       </ScrollView>
       <View style={styles.buttonContainer}>
         <View style={styles.buttons}>
@@ -119,7 +122,6 @@ const styles = StyleSheet.create({
     height: "40%",
     backgroundColor: "#ffffff",
     padding: 15,
-    borderRadius: 15,
   },
   listHeader: {
     fontSize: 24,
@@ -168,11 +170,28 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 20,
     marginBottom: 10,
-    marginTop: 15,
   },
-  bodyText: { marginVertical: 5, lineHeight: 18 },
+  bodyText: { marginVertical: 5, lineHeight: 20, fontSize: 16 },
+  recipePreviewText: {
+    fontSize: 14,
+    textAlign: "center",
+    fontWeight: 600,
+    color: "#2778fe",
+  },
+  recipePreviewTextBox: {
+    padding: 10,
+    borderBottomColor: "#d7d7d7ff",
+    borderBottomWidth: 1,
+  },
+  recipePreviewContainer: {
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
+    backgroundColor: "white",
+  },
 });
 
 export default ResponsePreview;

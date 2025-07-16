@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Button,
   Image,
   Modal,
   ScrollView,
@@ -78,7 +77,7 @@ const RecipeDetail = () => {
 
   function handleEdit() {
     setIsEditing(true);
-    onChangeTitleText(recipe.title);
+    onChangeTitleText(title);
   }
 
   function handleSubmit() {
@@ -118,15 +117,24 @@ const RecipeDetail = () => {
         visible={deleteModalVisible}
         animationType="fade"
       >
+        <View
+          style={{
+            backgroundColor: "#00000022",
+            height: "100%",
+            width: "100%",
+            position: "absolute",
+          }}
+        ></View>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{ fontSize: 16, marginBottom: 15 }}>
-              Are you sure you want to delete?
+            <Text style={styles.modalTitle}>Delete recipe?</Text>
+            <Text style={styles.modalText}>
+              This will permanently delete this recipe from your account.
             </Text>
             <View
               style={{
                 flexDirection: "row",
-                gap: 50,
+                gap: 75,
               }}
             >
               <TouchableOpacity
@@ -171,10 +179,19 @@ const RecipeDetail = () => {
         visible={discardModalVisible}
         animationType="fade"
       >
+        <View
+          style={{
+            backgroundColor: "#00000022",
+            height: "100%",
+            width: "100%",
+            position: "absolute",
+          }}
+        ></View>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{ marginVertical: 15, fontSize: 18 }}>
-              Discard changes?
+            <Text style={styles.modalTitle}>Leave this page?</Text>
+            <Text style={styles.modalText}>
+              Doing so will discard your unsaved changes.
             </Text>
             <View
               style={{
@@ -182,22 +199,38 @@ const RecipeDetail = () => {
                 gap: 50,
               }}
             >
-              <Button
-                style={styles.modalButtons}
+              <TouchableOpacity
                 onPress={() => {
                   setDiscardModalVisible(false);
                 }}
-                title="Cancel"
-                color="#00000082"
-              />
-              <Button
-                style={styles.modalButtons}
+              >
+                <Text
+                  style={{
+                    color: "#00000082",
+                    textAlign: "center",
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => {
                   router.back();
                 }}
-                title="Discard"
-                color="#ff0000ff"
-              />
+              >
+                <Text
+                  style={{
+                    color: "#2778fe",
+                    textAlign: "center",
+                    fontWeight: 500,
+                    fontSize: 16,
+                  }}
+                >
+                  Discard
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -219,13 +252,20 @@ const RecipeDetail = () => {
           />
           <View style={styles.textBoxCard}>
             {isEditing ? (
-              <TextInput onChangeText={onChangeTitleText} value={titleText} />
+              <TextInput
+                onChangeText={onChangeTitleText}
+                value={titleText}
+                style={styles.recipeTitle}
+                autoFocus={true}
+                maxLength={40}
+                numberOfLines={2}
+                multiline={true}
+              />
             ) : (
               <Text style={styles.recipeTitle}>{title}</Text>
             )}
             {isEditing ? (
-              <View style={styles.faveDelete}>
-                <View></View>
+              <View style={styles.editIcons}>
                 <TouchableOpacity onPress={handleCancelEdit}>
                   <FontAwesome name="close" size={24} color="black" />
                 </TouchableOpacity>
@@ -234,18 +274,7 @@ const RecipeDetail = () => {
                 </TouchableOpacity>
               </View>
             ) : (
-              <View style={styles.faveDelete}>
-                <View></View>
-                <TouchableOpacity onPress={handleFavourite}>
-                  {isFavourite ? (
-                    <AntDesign name="heart" size={20} color="red" />
-                  ) : (
-                    <AntDesign name="hearto" size={20} color="black" />
-                  )}
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleEdit} disabled={isDeleting}>
-                  <FontAwesome name="pencil" size={24} color="black" />
-                </TouchableOpacity>
+              <View style={styles.mainIcons}>
                 <TouchableOpacity
                   onPress={() => {
                     setDeleteModalVisible(true);
@@ -254,15 +283,26 @@ const RecipeDetail = () => {
                 >
                   <FontAwesome name="trash" size={24} color="black" />
                 </TouchableOpacity>
+                <TouchableOpacity onPress={handleEdit} disabled={isDeleting}>
+                  <FontAwesome name="pencil" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleFavourite}>
+                  {isFavourite ? (
+                    <AntDesign name="heart" size={20} color="red" />
+                  ) : (
+                    <AntDesign name="hearto" size={20} color="black" />
+                  )}
+                </TouchableOpacity>
               </View>
             )}
           </View>
         </View>
         <View
           style={{
-            borderBottomColor: "black",
-            borderBottomWidth: 0.5,
-            marginVertical: 5,
+            borderBottomColor: "#d7d7d7ff",
+            borderBottomWidth: 1,
+            marginVertical: 8,
+            marginBottom: 14,
           }}
         />
         <Text style={styles.heading}>Ingredients</Text>
@@ -273,6 +313,13 @@ const RecipeDetail = () => {
             </Text>
           );
         })}
+        <View
+          style={{
+            borderBottomColor: "#d7d7d7ff",
+            borderBottomWidth: 1,
+            marginVertical: 13,
+          }}
+        />
         <Text style={styles.heading}>Steps</Text>
         {recipe.steps?.map((step, index) => {
           return (
@@ -319,19 +366,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   textBoxCard: { flexShrink: 1, width: "100%" },
-  faveDelete: {
+  mainIcons: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
   },
+  editIcons: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "flex-end",
+  },
   heading: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 20,
     marginBottom: 10,
-    marginTop: 15,
   },
-  bodyText: { marginVertical: 5, lineHeight: 18 },
+  bodyText: { marginVertical: 5, lineHeight: 20, fontSize: 16 },
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -352,6 +404,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
   },
+  modalTitle: {
+    fontSize: 18,
+    marginBottom: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: { fontSize: 16, marginBottom: 20, textAlign: "center" },
 });
 
 export default RecipeDetail;

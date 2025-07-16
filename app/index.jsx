@@ -8,7 +8,7 @@ import {
 } from "@react-native-google-signin/google-signin";
 import { router } from "expo-router";
 import { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fetchUserByEmail, postUser } from "../api/api";
 import { UserContext } from "../contexts/UserContext";
@@ -71,8 +71,16 @@ export default function Main() {
   } else {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.titleTextBox}>
-          <Text style={styles.titleText}>reci-p.ai</Text>
+        <View
+          style={{ flexDirection: "column", alignItems: "center", gap: 25 }}
+        >
+          <Image
+            source={require("../assets/logo.png")}
+            style={{ height: 100, width: 100 }}
+          />
+          <View style={styles.titleTextBox}>
+            <Text style={styles.titleText}>reci-p.ai</Text>
+          </View>
         </View>
         <View>
           <GoogleSigninButton
@@ -94,7 +102,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: 100,
+    gap: 80,
     paddingBottom: 100,
   },
   titleText: {

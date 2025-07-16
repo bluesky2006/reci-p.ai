@@ -25,7 +25,11 @@ function HomePage() {
     return (
       <SafeAreaView style={styles.homePageContainer}>
         <View style={styles.titleContainer}>
-          <View>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <Image
+              source={require("../assets/logo.png")}
+              style={{ height: 40, width: 40 }}
+            />
             <Text style={styles.titleText}>reci-p.ai</Text>
           </View>
           <TouchableOpacity onPress={() => router.navigate("/profile")}>
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
   },
   button: { bottom: 20 },
   titleText: {
-    fontSize: 32,
+    fontSize: 30,
     textAlign: "center",
     color: "#2778fe",
     fontFamily: "Jura_700Bold",

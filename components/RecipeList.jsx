@@ -95,7 +95,7 @@ function RecipeList() {
         {filterFavourites
           ? recipes.toReversed().map((recipe) =>
               recipe.favourite ? (
-                <Pressable
+                <TouchableOpacity
                   key={recipe._id}
                   onPress={() =>
                     router.navigate({
@@ -111,13 +111,13 @@ function RecipeList() {
                     image={recipe.image}
                     summary={recipe.summary}
                   />
-                </Pressable>
+                </TouchableOpacity>
               ) : (
                 ""
               )
             )
           : recipes.toReversed().map((recipe) => (
-              <Pressable
+              <TouchableOpacity
                 key={recipe._id}
                 onPress={() =>
                   router.navigate({
@@ -133,7 +133,7 @@ function RecipeList() {
                   image={recipe.image}
                   summary={recipe.summary}
                 />
-              </Pressable>
+              </TouchableOpacity>
             ))}
       </ScrollView>
     </>
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
   },
   favTextBox: {
-    borderBottomColor: "#efefefff",
+    borderBottomColor: "#d7d7d7ff",
     borderBottomWidth: 0.5,
     width: "100%",
     flexDirection: "row",
