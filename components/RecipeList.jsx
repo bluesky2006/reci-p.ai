@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   },
   favTextBox: {
     borderBottomColor: "#d7d7d7ff",
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 1,
     width: "100%",
     flexDirection: "row",
     justifyContent: "flex-end",
