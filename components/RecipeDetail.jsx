@@ -3,22 +3,27 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  Button,
   Image,
-  SafeAreaView,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { deleteRecipe, favouriteRecipe, fetchRecipe } from "../api/api";
 
 const RecipeDetail = () => {
-  
   const { recipeId } = useLocalSearchParams();
   const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFavourite, setIsFavourite] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loadingModalVisible, setLoadingModalVisible] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -47,6 +52,8 @@ const RecipeDetail = () => {
   }
 
   function handleDelete() {
+    setLoadingModalVisible(false);
+    setIsDeleting(true);
     deleteRecipe(recipeId)
       .then(() => {
         router.back();
@@ -54,19 +61,65 @@ const RecipeDetail = () => {
       .catch((err) => {
         console.log(err);
         return <Text>Failed to delete</Text>;
+      })
+      .finally(() => {
+        setIsDeleting(false);
       });
   }
 
   if (isLoading) {
     return (
       <View>
-        <Text>Loading...</Text>
+        <Modal transparent={true} visible={isLoading} animationType="fade">
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <ActivityIndicator size="large" />
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
 
   return (
     <SafeAreaView style={{ backgroundColor: "#191460" }}>
+      <Modal
+        transparent={true}
+        visible={loadingModalVisible}
+        animationType="fade"
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={{ marginVertical: 15, fontSize: 18 }}>
+              Are you sure you want to delete?
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 50,
+              }}
+            >
+              <Button
+                style={styles.modalButtons}
+                onPress={() => {
+                  setLoadingModalVisible(false);
+                }}
+                title="Cancel"
+                color="#00000082"
+              />
+              <Button
+                style={styles.modalButtons}
+                onPress={() => {
+                  handleDelete();
+                }}
+                title="Delete"
+                color="#ff0000ff"
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <TouchableOpacity
         style={styles.titleTextBox}
         onPress={() => router.back()}
@@ -90,7 +143,12 @@ const RecipeDetail = () => {
                   <AntDesign name="hearto" size={20} color="black" />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleDelete}>
+              <TouchableOpacity
+                onPress={() => {
+                  setLoadingModalVisible(true);
+                }}
+                disabled={isDeleting}
+              >
                 <FontAwesome name="trash" size={24} color="black" />
               </TouchableOpacity>
             </View>
@@ -119,7 +177,7 @@ const RecipeDetail = () => {
             </Text>
           );
         })}
-        <View style={{ height: 40 }}></View>
+        <View style={{ height: 100 }}></View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -127,17 +185,18 @@ const RecipeDetail = () => {
 
 const styles = StyleSheet.create({
   pageContainer: {
+    height: "100%",
     borderColor: "#191460",
     borderWidth: 0.5,
     borderRadius: 15,
     padding: 15,
     backgroundColor: "white",
-    marginBottom: 30,
   },
   titleTextBox: {
     borderBottomColor: "#191460",
     borderBottomWidth: 0.5,
     padding: 20,
+    justifyContent: "center",
     backgroundColor: "#191460",
   },
   titleContainer: {
@@ -169,6 +228,27 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   bodyText: { marginVertical: 5, lineHeight: 18 },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 15,
+    borderRadius: 20,
+    padding: 20,
+    alignItems: "center",
+    backgroundColor: "white",
+    shadowColor: "#191460",
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  modalButtons: {
+    fontSize: 10,
+    backgroundColor: "white",
+    padding: 10,
+  },
 });
 
 export default RecipeDetail;

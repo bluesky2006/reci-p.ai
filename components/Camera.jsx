@@ -1,21 +1,21 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { ImageBackground } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
   ActivityIndicator,
   Button,
+  Image,
   Modal,
   Pressable,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import imageProcessing from "../utils/imageProcessing";
 
 export default function Camera() {
@@ -31,7 +31,6 @@ export default function Camera() {
     let photoResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
-      aspect: [1, 1],
       quality: 1,
       base64: true,
     });
@@ -68,37 +67,44 @@ export default function Camera() {
 
   const renderPicture = () => {
     return (
-      <SafeAreaView>
-        <View style={{ padding: 15 }}>
-          <ImageBackground
-            source={uri}
-            contentFit="cover"
-            imageStyle={{ borderRadius: 15 }}
+      <>
+        <Modal
+          transparent={true}
+          visible={loadingModalVisible}
+          animationType="fade"
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <ActivityIndicator size="large" />
+              <Text style={{ marginTop: 15 }}>Processing...</Text>
+            </View>
+          </View>
+        </Modal>
+        <SafeAreaView
+          style={{
+            backgroundColor: "white",
+            padding: 15,
+            width: "100%",
+          }}
+        >
+          <View
             style={{
-              width: "100%",
-              aspectRatio: 1 / 1.9,
-              flex: 1,
+              backgroundColor: "white",
               borderStyle: "dashed",
-              borderColor: "#191460",
+              borderColor: "black",
               borderWidth: 1,
+              bottom: 60,
               borderRadius: 15,
             }}
-          ></ImageBackground>
-          <Modal
-            transparent={true}
-            visible={loadingModalVisible}
-            animationType="fade"
           >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <ActivityIndicator size="large" />
-                <Text style={{ marginTop: 15 }}>Processing...</Text>
-              </View>
-            </View>
-          </Modal>
-        </View>
-        <View style={styles.previewButtonContainer}>
-          <TouchableOpacity onPress={() => router.back()}>
+            <Image source={{ uri }} style={styles.renderedImage} />
+          </View>
+        </SafeAreaView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={styles.buttons}
+          >
             <AntDesign name="close" size={40} color="#191460" />
           </TouchableOpacity>
           <TouchableOpacity
@@ -111,16 +117,17 @@ export default function Camera() {
                 params: { result: aiResult, photo: image64 },
               });
             }}
+            disabled={loadingModalVisible}
           >
             <View style={styles.checkButton} x>
               <AntDesign name="check" size={50} color="white" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setUri(null)}>
+          <TouchableOpacity onPress={() => setUri(null)} style={styles.buttons}>
             <AntDesign name="reload1" size={40} color="#191460" />
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </>
     );
   };
 
@@ -134,10 +141,13 @@ export default function Camera() {
           responsiveOrientationWhenOrientationLocked
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={styles.buttons}
+          >
             <AntDesign name="arrowleft" size={40} color="#191460" />
           </TouchableOpacity>
-          <Pressable style={styles.button} onPress={takePicture}>
+          <Pressable onPress={takePicture}>
             {({ pressed }) => (
               <View
                 style={[
@@ -158,7 +168,7 @@ export default function Camera() {
               </View>
             )}
           </Pressable>
-          <TouchableOpacity onPress={pickImage}>
+          <TouchableOpacity onPress={pickImage} style={styles.buttons}>
             <FontAwesome name="upload" size={40} color="#191460" />
           </TouchableOpacity>
         </View>
@@ -197,28 +207,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 0,
-  },
-  previewButtonContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    backgroundColor: "white",
-    borderColor: "#191460",
-    borderWidth: 0.5,
-    borderRadius: 15,
-    alignItems: "center",
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingTop: 3,
-    paddingBottom: 3,
+    height: 120,
   },
   checkButton: {
-    bottom: 20,
+    bottom: 40,
     backgroundColor: "#191460",
-    padding: 13,
+    padding: 10,
     borderRadius: 50,
     borderColor: "#191460",
     borderWidth: 1,
@@ -232,7 +226,7 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     alignItems: "center",
     justifyContent: "center",
-    bottom: 20,
+    bottom: 40,
   },
   shutterBtnInner: {
     width: 70,
@@ -259,7 +253,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  modalText: {
-    textAlign: "center",
+  buttons: { bottom: 10 },
+  renderedImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 15,
   },
 });

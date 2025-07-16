@@ -1,3 +1,4 @@
+import { Jura_700Bold, useFonts } from "@expo-google-fonts/jura";
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -5,40 +6,50 @@ import {
   isSuccessResponse,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-import { useContext, useState } from "react";
-import { Button, View } from "react-native";
-import { fetchUserByEmail, postUser } from "../api/api";
-import {UserContext} from '../contexts/UserContext'
 import { router } from "expo-router";
+import { useContext } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { fetchUserByEmail, postUser } from "../api/api";
+import { UserContext } from "../contexts/UserContext";
 
 export default function Main() {
   const { loggedInUserId, setLoggedInUserId } = useContext(UserContext);
-  const [user, setUser] = useState(null);
 
-  GoogleSignin.configure();
+  let [fontsLoaded] = useFonts({
+    Jura_700Bold,
+  });
+
+  GoogleSignin.configure({
+    iosClientId: process.env.EXPO_PUBLIC_IOS,
+  });
 
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const response = await GoogleSignin.signIn();
       if (isSuccessResponse(response)) {
-        setUser(response.data);
-        console.log(user.user);
-        fetchUserByEmail(user.user.email).then((res)=>{
-          setLoggedInUserId(res._id)
-        }).catch((err)=> {
-          postUser(user.user.email, user.user.name).then((res)=>{
-            setLoggedInUserId(res._id)
-          }).catch((err)=>{
-            console.log(err)
+        fetchUserByEmail(response.data.user.email)
+          .then((res) => {
+            setLoggedInUserId(res._id);
           })
-        }).finally(()=>{
-          router.navigate("/home");
-        })
+          .catch((err) => {
+            postUser(response.data.user.email, response.data.user.name)
+              .then((res) => {
+                setLoggedInUserId(res._id);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .finally(() => {
+            router.navigate("/home");
+          });
       } else {
         // sign in was cancelled by user
       }
     } catch (error) {
+      console.log(error);
       if (isErrorWithCode(error)) {
         switch (error.code) {
           case statusCodes.IN_PROGRESS:
@@ -55,28 +66,41 @@ export default function Main() {
       }
     }
   };
-
-  const signOut = async () => {
-    try {
-      await GoogleSignin.signOut();
-      setUser(null); // Remember to remove the user from your app's state as well
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  return (
-    <>
-      <View>
-        <GoogleSigninButton
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={() => {
-            signIn();
-          }}
-        />
-        <Button onPress={() => signOut()} title="Sign Out" disabled={!user} />
-      </View>
-    </>
-  );
+  if (!fontsLoaded) {
+    return null;
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.titleTextBox}>
+          <Text style={styles.titleText}>reci-p.ai</Text>
+        </View>
+        <View>
+          <GoogleSigninButton
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={() => {
+              signIn();
+            }}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 100,
+    paddingBottom: 100,
+  },
+  titleText: {
+    fontSize: 50,
+    textAlign: "center",
+    color: "#191460",
+    fontFamily: "Jura_700Bold",
+  },
+});
