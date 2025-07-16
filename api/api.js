@@ -62,7 +62,7 @@ export function favouriteRecipe(recipeId, favourite) {
 }
 
 export function editRecipeTitle(recipeId, title) {
-  return fetch(`${baseUrl}/recipes/${recipeId}`, {
+  return fetch(`${baseUrl}/recipes/${recipeId}/details`, {
     method: "PATCH",
     body: JSON.stringify({ title }),
     headers: { "Content-type": "application/json" },
