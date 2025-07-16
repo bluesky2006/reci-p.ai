@@ -188,7 +188,7 @@ const RecipeDetail = () => {
                 }}
                 disabled={isDeleting}
               >
-                <FontAwesome name="trash" size={20} color="black" />
+                <FontAwesome name="trash" size={24} color="black" />
               </TouchableOpacity>
             </View>
           </View>
