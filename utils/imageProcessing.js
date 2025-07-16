@@ -6,7 +6,6 @@ const ai = new GoogleGenAI({ apiKey: `${process.env.EXPO_PUBLIC_GEMINI}` });
 const imageProcessing = async (uri) => {
   try {
     const result = await extractTextFromImage(uri);
-    console.log(result);
     const aiResponse = await geminiCall(result.join(" "));
     return aiResponse;
   } catch (error) {
@@ -49,7 +48,6 @@ async function geminiCall(ocrText) {
       },
     },
   });
-  console.log(JSON.parse(response.candidates[0].content.parts[0].text));
   return response.candidates[0].content.parts[0].text;
 }
 export default imageProcessing;

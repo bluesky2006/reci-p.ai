@@ -29,7 +29,6 @@ function RecipeList() {
       setIsLoading(true);
       fetchRecipes(loggedInUserId)
         .then((result) => {
-          console.log("fetching");
           setRecipes(result.recipes);
           setIsLoading(false);
         })

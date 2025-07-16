@@ -83,12 +83,11 @@ const RecipeDetail = () => {
 
   function handleSubmit() {
     editRecipeTitle(recipeId, titleText)
-      .then((res) => {console.log(res)})
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        setIsEditing(false); //consider setTitle within this function, using the state to draw our title in return + having it as a re-fetch dependency or similar
+        setIsEditing(false);
         setTitle(titleText)
       });
   }
