@@ -15,7 +15,6 @@ export function fetchUserByEmail(email) {
 }
 
 export function postUser(username, name) {
-  //need to update with google auth stuff
   return fetch(`${baseUrl}/users`, {
     method: "POST",
     body: JSON.stringify({
@@ -58,6 +57,17 @@ export function favouriteRecipe(recipeId, favourite) {
     headers: { "Content-type": "application/json" },
   }).then((res) => {
     if (!res.ok) throw new Error("Could not favourite recipe!");
+    return res.json();
+  });
+}
+
+export function editRecipeTitle(recipeId, title) {
+  return fetch(`${baseUrl}/recipes/${recipeId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ title }),
+    headers: { "Content-type": "application/json" },
+  }).then((res) => {
+    if (!res.ok) throw new Error("Failed to edit recipe!");
     return res.json();
   });
 }

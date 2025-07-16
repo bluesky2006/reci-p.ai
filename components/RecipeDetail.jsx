@@ -10,11 +10,17 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { deleteRecipe, favouriteRecipe, fetchRecipe } from "../api/api";
+import {
+  deleteRecipe,
+  editRecipeTitle,
+  favouriteRecipe,
+  fetchRecipe,
+} from "../api/api";
 
 const RecipeDetail = () => {
   const { recipeId } = useLocalSearchParams();
@@ -23,7 +29,11 @@ const RecipeDetail = () => {
   const [isFavourite, setIsFavourite] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
-
+  const [title, setTitle] = useState("");
+  const [ingredients, setIngredients] = useState("");
+  const [steps, setSteps] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [titleText, onChangeTitleText] = useState("placeholder");
   const router = useRouter();
 
   useEffect(() => {
@@ -31,6 +41,9 @@ const RecipeDetail = () => {
     fetchRecipe(recipeId)
       .then((result) => {
         setRecipe(result);
+        setTitle(result.title);
+        setIngredients(result.ingredients);
+        setSteps(result.steps);
         setIsFavourite(result.favourite);
       })
       .catch((err) => {
@@ -60,13 +73,27 @@ const RecipeDetail = () => {
       })
       .catch((err) => {
         console.log(err);
-        return <Text>Failed to delete</Text>;
       })
       .finally(() => {
         setIsDeleting(false);
       });
   }
 
+  function handleEdit() {
+    setIsEditing(true);
+    onChangeTitleText(recipe.title);
+  }
+
+  function handleSubmit() {
+    editRecipeTitle(recipeId, titleText)
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsEditing(false); //consider setTitle within this function, using the state to draw our title in return + having it as a re-fetch dependency or similar
+      });
+  }
   if (isLoading) {
     return (
       <View>
@@ -133,7 +160,11 @@ const RecipeDetail = () => {
             source={{ uri: `data:image/jpeg;base64,${recipe.image}` }}
           />
           <View style={styles.textBoxCard}>
-            <Text style={styles.recipeTitle}>{recipe.title}</Text>
+            {isEditing ? (
+              <TextInput onChangeText={onChangeTitleText} value={titleText} />
+            ) : (
+              <Text style={styles.recipeTitle}>{recipe.title}</Text>
+            )}
             <View style={styles.faveDelete}>
               <View></View>
               <TouchableOpacity onPress={handleFavourite}>
@@ -143,6 +174,14 @@ const RecipeDetail = () => {
                   <AntDesign name="hearto" size={20} color="black" />
                 )}
               </TouchableOpacity>
+              <TouchableOpacity onPress={handleEdit} disabled={isDeleting}>
+                <FontAwesome name="pencil" size={24} color="black" />
+              </TouchableOpacity>
+              {isEditing && (
+                <TouchableOpacity onPress={handleSubmit}>
+                  <FontAwesome name="check" size={24} color="black" />
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
                 onPress={() => {
                   setLoadingModalVisible(true);
